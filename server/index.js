@@ -3,12 +3,19 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 
 import connectDB from './config/connectDB.js';
+import userRouter from './routes/user.routes.js';
+import postRouter from './routes/post.routes.js';
+import commentRouter from './routes/comment.routes.js';
 
 dotenv.config();
 const app = express();
 app.use(cors());
 
 app.use(express.json({ limit: '50mb' }));
+app.use('/api/users',userRouter);
+app.use('/api/posts',postRouter);
+app.use('/api/comments',commentRouter);
+
 
 const startServer = async () => {
   try {
