@@ -8,37 +8,51 @@ import bcrypt from "bcrypt";
 // ========= REGISTER USER ==========
 export const register = async (req, res) => {
   try {
-    const { email } = req.body;
+    const {
+      userName,
+      firstName,
+      lastName,
+      location,
+      email,
+      password,
+      confirmPassword,
+    } = req.body;
+    if (password !== confirmPassword) {
+      return res.status(400).json("Passwords don't match");
+    }
 
     //==== checks if email already registered =====
     const user = await User.findOne({ email });
     if (user) {
       return res.status(409).json("Email already registered");
     }
-    const newUser = User.create(req.body);
+    // const newUser = await User.create(req.body);
+
+    // res.status(201).cookie("token", userToken).json(newUser);
+
+    // ====== If the model pre user register works then dont need this ===========
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+    const newUser = new User({
+      userName,
+      firstName,
+      lastName,
+      email,
+      password: passwordHash,
+      location,
+    });
+    const saveUser = await newUser.save();
     const userToken = jwt.sign(
       {
-        _id: user._id,
+        _id: saveUser._id,
       },
       process.env.SECRET_KEY
     );
-    res.status(201).cookie("token", userToken).json(newUser);
 
-    // ====== If the model pre user register works then dont need this ===========
-    // const salt = await bcrypt.genSalt();
-    // const passwordHash =  await bcrypt.hash(password, salt);
-    //   const newUser = new User({
-    //     firstName,
-    //     lastName,
-    //     email,
-    //     password: passwordHash,
-    //     picturePath,
-    //     friends,
-    //     location,
-    //
-    // });
-    // const saveUser = await newUser.save();
-    // res.status(201).json(saveUser);
+    res
+      .status(201)
+      .cookie("token", userToken, { httpOnly: true })
+      .json({userToken,saveUser});
   } catch (err) {
     res.status(400).json({ message: "That didn't quite work", err });
   }
@@ -71,7 +85,7 @@ export const login = async (req, res) => {
       .cookie("token", token, { httpOnly: true })
       .json({ token, user });
   } catch (err) {
-    res.status(400).json({message: "Login failed", err})
+    res.status(400).json({ message: "Login failed", err });
   }
 };
 
