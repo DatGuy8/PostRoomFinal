@@ -22,8 +22,8 @@ export const register = async (req, res) => {
     }
 
     //==== checks if email already registered =====
-    const user = await User.findOne({ email });
-    if (user) {
+    const alreadyUser = await User.findOne({ email });
+    if (alreadyUser) {
       return res.status(409).json("Email already registered");
     }
     // const newUser = await User.create(req.body);
@@ -41,18 +41,20 @@ export const register = async (req, res) => {
       password: passwordHash,
       location,
     });
-    const saveUser = await newUser.save();
-    const userToken = jwt.sign(
+    const user = await newUser.save();
+    const token = jwt.sign(
       {
-        _id: saveUser._id,
+        _id: user._id,
       },
       process.env.SECRET_KEY
     );
-
+    const returnUser = user.toObject();
+    delete returnUser.password;
+    
     res
       .status(201)
-      .cookie("token", userToken, { httpOnly: true })
-      .json({userToken,saveUser});
+      .cookie("token", token, { httpOnly: true })
+      .json({ token, returnUser });
   } catch (err) {
     res.status(400).json({ message: "That didn't quite work", err });
   }
@@ -79,11 +81,13 @@ export const login = async (req, res) => {
       },
       process.env.SECRET_KEY
     );
-    delete user.password;
+    const returnUser = user.toObject();
+    delete returnUser.password;
+    console.log(returnUser);
     res
       .status(200)
       .cookie("token", token, { httpOnly: true })
-      .json({ token, user });
+      .json({ token, returnUser });
   } catch (err) {
     res.status(400).json({ message: "Login failed", err });
   }

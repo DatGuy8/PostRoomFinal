@@ -4,7 +4,6 @@ import {
   Button,
   TextField,
   useMediaQuery,
-  Typography,
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -43,10 +42,10 @@ const RegisterForm = () => {
     axios
       .post('http://localhost:8080/api/users/register', form)
       .then((res)=>{
-        console.log(res);
+        console.log(res.data.returnUser);
         dispatch(setLogin({
-          user: res.data.saveUser._id,
-          token: res.data.userToken
+          user: res.data.returnUser,
+          token: res.data.token
         }))
         navigate('/home');
       })

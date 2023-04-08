@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice =  createSlice({
   name: 'user',
   initialState:{
-    lightMode: "light",
+    mode: "light",
     user: null,
     token: null,
   },
   reducers:{
-    setLightMode: (state) => {
-      state.lightMode = state.lightMode === "light" ? "dark" : "light";
+    setMode: (state) => {
+      state.mode = state.mode === "light" ? "dark" : "light";
     },
     setLogin: (state, action) => {
       state.user = action.payload.user;
@@ -22,6 +22,6 @@ export const userSlice =  createSlice({
   }
 });
 
-export const { setLightMode,setLogin, setLogout} = userSlice.actions;
+export const { setMode,setLogin, setLogout} = userSlice.actions;
 
 export default userSlice.reducer;
