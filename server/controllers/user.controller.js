@@ -40,6 +40,7 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
       location,
+      userPhoto: process.env.DEFAULT_USER_PHOTO,
     });
     const user = await newUser.save();
     const token = jwt.sign(
@@ -50,7 +51,7 @@ export const register = async (req, res) => {
     );
     const returnUser = user.toObject();
     delete returnUser.password;
-    
+
     res
       .status(201)
       .cookie("token", token, { httpOnly: true })

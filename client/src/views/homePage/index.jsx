@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import NavBar from "views/navBar";
+import UserWidget from "widgets/UserWidget";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
@@ -18,7 +19,7 @@ const HomePage = () => {
         gap="0.5rem"
       >
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-          userWidget here
+          <UserWidget userId={user._id} userPhoto={user.userPhoto}/>
         </Box>
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}

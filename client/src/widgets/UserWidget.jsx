@@ -1,10 +1,17 @@
+import axios from "axios";
+import FlexBox from "components/FlexBox";
+import WidgetBox from "components/WidgetBox";
+import UserProfilePhoto from "components/UserProfilePhoto";
 
+const UserWidget = ({ userId, userPhoto }) => {
 
-
-const UserWidget = () => {
   return (
-    <div>UserWidget</div>
-  )
-}
+    <WidgetBox>
+      <FlexBox>
+        <UserProfilePhoto userPhoto={userPhoto} />
+      </FlexBox>
+    </WidgetBox>
+  );
+};
 
-export default UserWidget
+export default UserWidget;
