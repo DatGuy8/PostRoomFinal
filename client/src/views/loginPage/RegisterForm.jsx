@@ -1,43 +1,42 @@
-import { useState } from "react";
 import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state/user";
 import FlexBox from "components/FlexBox";
 import axios from "axios";
-import * as yup from "yup";
+import * as Yup from "yup";
 import { Formik } from "formik";
 
 const RegisterForm = () => {
-  const validationSchema = yup.object().shape({
-    userName: yup
+  const validationSchema = Yup.object().shape({
+    userName: Yup
       .string()
       .required("Please enter a user name")
       .min(3, "User name must be longer than 3 characters")
       .max(20, "Must be shorter than 20"),
-    firstName: yup
+    firstName: Yup
       .string()
       .required("Please enter a first name")
       .min(3, "First name must be longer than 3 characters")
       .max(30, "Must be shorter than 30"),
-    lastName: yup
+    lastName: Yup
       .string()
       .required("Please enter a last name")
       .min(2, "Last name must be longer than 2 characters")
       .max(30, "Must be shorter than 30"),
-    email: yup
+    email: Yup
       .string()
       .email("Please enter a valid email")
       .required("Email is required"),
-    password: yup
+    password: Yup
       .string()
       .required("Password is required")
-      .min(3, "First name must be longer than 3 characters")
+      .min(8, "Password must be longer than 8 characters")
       .max(30, "Must be shorter than 30"),
-    confirmPassword: yup
+    confirmPassword: Yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
-    location: yup
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    location: Yup
       .string()
       .required("Please enter location")
       .min(2, "Must be at least 2 characters"),
