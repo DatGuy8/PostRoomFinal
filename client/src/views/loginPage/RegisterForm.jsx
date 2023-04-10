@@ -2,7 +2,6 @@ import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state/user";
-import FlexBox from "components/FlexBox";
 import axios from "axios";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -49,9 +48,8 @@ const RegisterForm = () => {
   // const isLogin = pageType === "login";
   // const isRegister = pageType === "register";
 
-  const onSubmitHandler = (values, onSubmitProps) => {
-    axios
-      .post("http://localhost:8080/api/users/register", values)
+  const onSubmitHandler = (values) => {
+    axios.post("http://localhost:8080/api/users/register", values)
       .then((res) => {
         console.log(res.data.returnUser);
         dispatch(
