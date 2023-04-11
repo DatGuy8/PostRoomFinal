@@ -3,6 +3,7 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import NavBar from "views/navBar";
 import UserWidget from "widgets/UserWidget";
 import AddPostWidget from "widgets/AddPostWidget";
+import AllPostsWidget from "widgets/AllPostsWidget";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
@@ -27,7 +28,7 @@ const HomePage = () => {
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <AddPostWidget userPhoto={user.userPhoto}/>
-          create post widget and posts widget
+          <AllPostsWidget userId={user._id}/>
         </Box>
         {/* FRIENDS LIST APPEARS ON DESKTOP ONLY */}
         {isNonMobileScreens && (

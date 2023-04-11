@@ -1,11 +1,7 @@
 import {
   EditOutlined,
   DeleteOutlined,
-  AttachFileOutlined,
-  GifBoxOutlined,
   ImageOutlined,
-  MicOutlined,
-  MoreHorizOutlined,
 } from "@mui/icons-material";
 import {
   Box,
@@ -29,7 +25,7 @@ const AddPostWidget = ({ userPhoto }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
-  const [post, setPost] = useState("");
+  const [title, setTitle] = useState("");
   const { _id } = useSelector((state) => state.user);
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px");
@@ -37,25 +33,27 @@ const AddPostWidget = ({ userPhoto }) => {
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
-  const handlePost = () => {
-    console.log(image);
-    const form = {
-      title: post,
-      userId: _id,
-      photo: image,
-    };
-    
-    console.log('before axios', form);
+  const handlePost = async () => {
+    const formData = new FormData();
+    if(image){
+      formData.append('photo', image);
+    }
+    formData.append('title', title);
+    formData.append('userId', _id);
     axios
-      .post(`http://localhost:8080/api/posts/create`, form)
+      .post(`http://localhost:8080/api/posts/create`, formData)
       .then((res) => {
         console.log(res);
+        setImage(null);
+        setTitle('')
       })
       .catch((err) => {
         console.log(err);
       });
       
   };
+
+  
 
   return (
     <WidgetBox>
@@ -64,8 +62,8 @@ const AddPostWidget = ({ userPhoto }) => {
 
         <InputBase
           placeholder="What do you want to post?"
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
           sx={{
             backgroundColor: palette.neutral.light,
             width: "100%",
@@ -136,7 +134,7 @@ const AddPostWidget = ({ userPhoto }) => {
         </FlexBox>
         
         <Button
-          disabled={!post}
+          disabled={!title}
           onClick={handlePost}
           sx={{
             color: "palette.background.alt",

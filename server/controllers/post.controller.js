@@ -1,40 +1,38 @@
 //========== IMPORTS THE MODEL FILE ==============
-import Post from '../models/post.js';
-import * as dotenv from "dotenv";
-import { v2 as cloudinary } from "cloudinary";
-import mongoose from 'mongoose';
-import User from '../models/user.js';
+import Post from "../models/post.js";
+import User from "../models/user.js";
 
-dotenv.config();
+// import User from '../models/user.js';
+// import multer from 'multer';
+// import { v4 as uuidv4 } from 'uuid';
+// import path from 'path';
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const options = {
-  use_filename: true,
-  unique_filename: false,
-  overwrite: true,
-};
+// const storage = multer.diskStorage({
+//   destination: function(req, file, cb){
+//     cb(null, 'images');
+//   },
+//   filename: function(req, file, cb){
+//     cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
+//   }
+// })
 
 //========= CREATE A POST ===========
 export const createPost = async (req, res) => {
   try {
-    const { title, userId, photo } = req.body;
-    console.log(req.body);
+    const { title, userId } = req.body;
+    const photo = req.file?.filename;
+    console.log(photo);
     // const post = await Post.create(req.body);
-    const photoUrl = await cloudinary.uploader.upload(photo.path,options);
-    console.log(photoUrl);
+    // const photoUrl = await cloudinary.uploader.upload(photo);
+    // console.log(photoUrl);
     const newPost = await Post.create({
+      likes: new Map(),
       title,
       userId,
-      photo: photoUrl.url
-    })
-    
-    res.status(201).json('OKAY', newPost);
+      photo
+    });
 
+    res.status(201).json(newPost);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
@@ -43,36 +41,27 @@ export const createPost = async (req, res) => {
 //========= GET ALL POSTS ==========
 export const getAllPosts = async (req, res) => {
   try {
-    
-  } catch (err) {
-    
+    const posts = await Post.find().sort("-createdAt");
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
 //========= GET ONE POST ===========
 export const getOnePost = async (req, res) => {
   try {
-    
-  } catch (err) {
-    
-  }
+  } catch (err) {}
 };
 
 //======== LIKE A POST ===========
 export const likePost = async (req, res) => {
   try {
-    
-  } catch (err) {
-    
-  }
+  } catch (err) {}
 };
 
 //======== SEARCH FOR POSTS ==========
 export const searchPosts = async (req, res) => {
   try {
-    
-  } catch (err) {
-    
-  }
+  } catch (err) {}
 };
-
