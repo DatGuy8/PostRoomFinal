@@ -9,37 +9,33 @@ import { Formik } from "formik";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object().shape({
-    userName: Yup
-      .string()
+    userName: Yup.string()
       .required("Please enter a user name")
       .min(3, "User name must be longer than 3 characters")
       .max(20, "Must be shorter than 20"),
-    firstName: Yup
-      .string()
+    firstName: Yup.string()
       .required("Please enter a first name")
       .min(3, "First name must be longer than 3 characters")
       .max(30, "Must be shorter than 30"),
-    lastName: Yup
-      .string()
+    lastName: Yup.string()
       .required("Please enter a last name")
       .min(2, "Last name must be longer than 2 characters")
       .max(30, "Must be shorter than 30"),
-    email: Yup
-      .string()
+    email: Yup.string()
       .email("Please enter a valid email")
       .required("Email is required"),
-    password: Yup
-      .string()
+    password: Yup.string()
       .required("Password is required")
       .min(8, "Password must be longer than 8 characters")
       .max(30, "Must be shorter than 30"),
-    confirmPassword: Yup
-      .string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match"),
-    location: Yup
-      .string()
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Passwords must match"
+    ),
+    location: Yup.string()
       .required("Please enter location")
       .min(2, "Must be at least 2 characters"),
+    occupation: Yup.string()
   });
 
   const { palette } = useTheme();
@@ -64,7 +60,7 @@ const RegisterForm = () => {
       })
       .catch((err) => {
         // console.log("Error is this", err);
-        console.log(err.response.data.err.errors);
+        console.log(err);
       });
   };
 
@@ -79,6 +75,7 @@ const RegisterForm = () => {
         password: "",
         confirmPassword: "",
         location: "",
+        occupation: "",
       }}
       validationSchema={validationSchema}
     >
@@ -132,6 +129,16 @@ const RegisterForm = () => {
                 helperText={touched.lastName && errors.lastName}
                 onBlur={handleBlur}
               />
+              <TextField
+                  label="Occupation"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.occupation}
+                  name="occupation"
+                  error={Boolean(touched.occupation) && Boolean(errors.occupation)}
+                  helperText={touched.occupation && errors.occupation}
+                  sx={{ gridColumn: "span 4" }}
+                />
               <TextField
                 label="Location"
                 onChange={handleChange}

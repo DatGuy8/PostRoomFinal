@@ -39,6 +39,15 @@ const NavBar = () => {
   const background = palette.background.default;
   const light = palette.primary.light;
   const alt = palette.background.alt;
+
+  // const onLogOutHandler = () => {
+  //   axios.post('http://localhost:8080/api/users/logout')
+  //   .then((res)=>{
+
+  //     dispatch(setLogout());
+  //   })
+  // };
+
   return (
     <FlexBox padding="1rem 6%" backgroundColor={alt}>
       <FlexBox gap="2rem">

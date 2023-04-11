@@ -6,24 +6,24 @@ const UserSchema = new mongoose.Schema(
   {
     userName: {
       type: String,
-      required: [true, "User Name is required"],
-      minlength: [3, "User Name must be longer than 3 characters"],
+      required: true
     },
     firstName: {
       type: String,
-      required: [true, "First name is required"],
+      required: true
     },
     lastName: {
       type: String,
-      required: [true, "Last name is required"],
+      required: true,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: true,
       validate: {
         validator: (val) => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
         message: "Please enter a valid email",
       },
+      unique: true
     },
     password: {
       type: String,
@@ -39,6 +39,7 @@ const UserSchema = new mongoose.Schema(
     },
     allPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    occupation: String,
   },
   { timestamps: true }
 );

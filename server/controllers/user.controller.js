@@ -13,6 +13,7 @@ export const register = async (req, res) => {
       firstName,
       lastName,
       location,
+      occupation,
       email,
       password,
       confirmPassword,
@@ -33,11 +34,13 @@ export const register = async (req, res) => {
     // ====== If the model pre user register works then dont need this ===========
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
+    console.log(occupation);
     const newUser = new User({
       userName,
       firstName,
       lastName,
       email,
+      occupation,
       password: passwordHash,
       location,
       userPhoto: process.env.DEFAULT_USER_PHOTO,
@@ -51,7 +54,7 @@ export const register = async (req, res) => {
     );
     const returnUser = user.toObject();
     delete returnUser.password;
-
+    console.log(token);
     res
       .status(201)
       .cookie("token", token, { httpOnly: true })
@@ -84,7 +87,8 @@ export const login = async (req, res) => {
     );
     const returnUser = user.toObject();
     delete returnUser.password;
-    console.log(returnUser);
+    // console.log(returnUser);
+    console.log(token);
     res
       .status(200)
       .cookie("token", token, { httpOnly: true })
@@ -95,4 +99,16 @@ export const login = async (req, res) => {
 };
 
 // ========= GET ONE USER ==========
-export const getOneUser = async (req, res) => {};
+export const getOneUser = async (req, res) => {
+  try {
+    const {_id} = req.params;
+    console.log(_id); 
+    const user = await User.findOne({_id : _id});
+    const returnUser = user.toObject();
+    delete returnUser.password;
+    
+    res.status(200).json(returnUser);
+  } catch (error) {
+    res.status(400).json({ message: "Get One User failed", err });
+  }
+};

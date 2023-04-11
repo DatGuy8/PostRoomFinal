@@ -7,15 +7,6 @@ const PostSchema = new mongoose.Schema({
       type: String,
       required: [true, "title is required"]
   },
-  category: {
-      type: String,
-      required: [true, "Category is required"]
-  },
-  description: {
-      type: String,
-      required:[true, "Please provide a description"],
-      minlength:[3, 'Description must be at least 3 character!']
-  },
   likes: {
     type: Map,
     of: Boolean
@@ -31,8 +22,6 @@ const PostSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  
-  
 }, { timestamps: true });
 
 
