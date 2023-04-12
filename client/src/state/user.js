@@ -15,10 +15,9 @@ export const userSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
-
     
     //NEED A SET FRIENDS HERE
-
+    
     setLogout: (state) => {
       state.user = null;
       state.token = null;
