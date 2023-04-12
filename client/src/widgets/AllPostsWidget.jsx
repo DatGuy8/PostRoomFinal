@@ -1,46 +1,42 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PostWidget from "./PostWidget";
-import axios from 'axios';
+import axios from "axios";
 
 const AllPostsWidget = ({ userId }) => {
-  const [posts, setPosts] = useState([])
-  useEffect(()=>{
-    axios.get(`http://localhost:8080/api/posts`)
-    .then((res)=>{
-      console.log(res);
-      setPosts(res.data)
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-  },[])
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/posts`)
+      .then((res) => {
+        console.log(res);
+        setPosts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <>
-    {posts.map(
-      ({
-        _id,
-        title,
-        likes,
-        viewCount,
-        comments,
-        photo,
-        userId 
-      })=>(
-        <PostWidget
-          key={_id}
-          postId={_id}
-          postUserId={userId}
-          title={title}
-          photo={photo}
-          comments={comments}
-          viewCount={viewCount}
-          likes={likes}
-        />
-      )
-    )}
+      {posts.map(
+        ({ _id, title, likes, viewCount, comments, photo, userId }) => (
+          <PostWidget
+            key={_id}
+            postId={_id}
+            postUserId={userId._id}
+            title={title}
+            photo={photo}
+            comments={comments}
+            viewCount={viewCount}
+            likes={likes}
+            postUserPicture={userId.userPhoto}
+            postUserFullName={userId.firstName + " " + userId.lastName}
+            postUserLocation={userId.location}
+          />
+        )
+      )}
     </>
-  )
-}
+  );
+};
 
-export default AllPostsWidget
+export default AllPostsWidget;

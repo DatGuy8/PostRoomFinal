@@ -69,7 +69,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // find user
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }).select('+password');
 
     // if no user
     if (!user) return res.status(400).json({ message: "User does not exist" });
@@ -104,10 +104,9 @@ export const getOneUser = async (req, res) => {
     const {_id} = req.params;
     console.log(_id); 
     const user = await User.findOne({_id : _id});
-    const returnUser = user.toObject();
-    delete returnUser.password;
     
-    res.status(200).json(returnUser);
+    
+    res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ message: "Get One User failed", err });
   }

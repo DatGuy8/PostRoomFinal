@@ -9,7 +9,7 @@ const UserProfilePhoto = ({ userPhoto, size = '60px'}) => {
         width={size}
         height={size}
         alt="userPhoto"
-        src={userPhoto}
+        src={`http://localhost:8080/images/${userPhoto}`}
       />
     </Box>
   )

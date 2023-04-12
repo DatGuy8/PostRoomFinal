@@ -6,11 +6,6 @@ import connectDB from './config/connectDB.js';
 import userRouter from './routes/user.routes.js';
 import postRouter from './routes/post.routes.js';
 import commentRouter from './routes/comment.routes.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const app = express();

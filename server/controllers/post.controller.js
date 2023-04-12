@@ -2,20 +2,6 @@
 import Post from "../models/post.js";
 import User from "../models/user.js";
 
-// import User from '../models/user.js';
-// import multer from 'multer';
-// import { v4 as uuidv4 } from 'uuid';
-// import path from 'path';
-
-// const storage = multer.diskStorage({
-//   destination: function(req, file, cb){
-//     cb(null, 'images');
-//   },
-//   filename: function(req, file, cb){
-//     cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
-//   }
-// })
-
 //========= CREATE A POST ===========
 export const createPost = async (req, res) => {
   try {
@@ -29,7 +15,7 @@ export const createPost = async (req, res) => {
       likes: new Map(),
       title,
       userId,
-      photo
+      photo,
     });
 
     res.status(201).json(newPost);
@@ -41,7 +27,7 @@ export const createPost = async (req, res) => {
 //========= GET ALL POSTS ==========
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort("-createdAt");
+    const posts = await Post.find().sort("-createdAt").populate("userId").populate('comments');
     res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -57,7 +43,26 @@ export const getOnePost = async (req, res) => {
 //======== LIKE A POST ===========
 export const likePost = async (req, res) => {
   try {
-  } catch (err) {}
+    const { _id, userId } = req.params;
+    const post = await Post.findById(_id);
+    const isLiked = post.likes.get(userId);
+
+    if (isLiked) {
+      post.likes.delete(userId);
+    } else {
+      post.likes.set(userId, true);
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      _id,
+      { likes: post.likes },
+      { new: true }
+    );
+
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
 };
 
 //======== SEARCH FOR POSTS ==========
