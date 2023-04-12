@@ -20,6 +20,7 @@ import WidgetBox from "components/WidgetBox";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { setPosts } from "state/user";
 
 const AddPostWidget = ({ userPhoto }) => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const AddPostWidget = ({ userPhoto }) => {
       })
       .then((res) => {
         console.log(res);
+        dispatch(setPosts({posts: res.data}))
         setImage(null);
         setTitle("");
       })

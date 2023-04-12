@@ -12,13 +12,14 @@ export const addComment = async (req, res) => {
       postId
     });
 
-    const relatedPost = await Post.findById(postId);
+    const relatedPost = await Post.findById(postId).populate('comments').populate('userId');
     
     if(relatedPost){
       relatedPost.comments.push(newComment);
     }
 
     const updatedPost = await relatedPost.save();
+    
     res.status(200).json(updatedPost);
   } catch (err) {
     res.status(404).json({ message: err.message });

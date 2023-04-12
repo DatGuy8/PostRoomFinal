@@ -21,6 +21,7 @@ import axios from "axios";
 import WidgetBox from "components/WidgetBox";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setPost } from "state/user";
 
 const PostWidget = ({
   title,
@@ -50,7 +51,8 @@ const PostWidget = ({
     axios
       .patch(`http://localhost:8080/api/posts/${postId}/like/${loggedInUserId}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        dispatch(setPost({ post: res.data }));
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +67,9 @@ const PostWidget = ({
         commentForm
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        dispatch(setPost({ post: res.data }));
+        setComment('')
       })
       .catch((err) => {
         console.log(err);
