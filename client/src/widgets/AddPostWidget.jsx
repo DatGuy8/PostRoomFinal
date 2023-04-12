@@ -27,6 +27,7 @@ const AddPostWidget = ({ userPhoto }) => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const { _id } = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px");
   const { palette } = useTheme();
@@ -35,29 +36,28 @@ const AddPostWidget = ({ userPhoto }) => {
 
   const handlePost = async () => {
     const formData = new FormData();
-    if(image){
-      formData.append('photo', image);
+    if (image) {
+      formData.append("photo", image);
     }
-    formData.append('title', title);
-    formData.append('userId', _id);
+    formData.append("title", title);
+    formData.append("userId", _id);
     axios
-      .post(`http://localhost:8080/api/posts/create`, formData)
+      .post(`http://localhost:8080/api/posts/create`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         console.log(res);
         setImage(null);
-        setTitle('')
+        setTitle("");
       })
       .catch((err) => {
         console.log(err);
       });
-      
   };
-
-  
 
   return (
     <WidgetBox>
-      <FlexBox gap='1.5rem'>
+      <FlexBox gap="1.5rem">
         <UserProfilePhoto userPhoto={userPhoto} />
 
         <InputBase
@@ -132,7 +132,7 @@ const AddPostWidget = ({ userPhoto }) => {
             Image
           </Typography>
         </FlexBox>
-        
+
         <Button
           disabled={!title}
           onClick={handlePost}

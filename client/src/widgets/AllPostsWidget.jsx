@@ -5,9 +5,14 @@ import axios from "axios";
 
 const AllPostsWidget = ({ userId }) => {
   const [posts, setPosts] = useState([]);
+  const token = useSelector((state) => state.token);
+
   useEffect(() => {
+    const header = { Authorization: `Bearer ${token}` };
     axios
-      .get(`http://localhost:8080/api/posts`)
+      .get(`http://localhost:8080/api/posts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         console.log(res);
         setPosts(res.data);
@@ -16,6 +21,7 @@ const AllPostsWidget = ({ userId }) => {
         console.log(err);
       });
   }, []);
+
   return (
     <>
       {posts.map(

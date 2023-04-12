@@ -18,23 +18,16 @@ export const register = async (req, res) => {
       password,
       confirmPassword,
     } = req.body;
-    if (password !== confirmPassword) {
-      return res.status(400).json("Passwords don't match");
-    }
 
     //==== checks if email already registered =====
     const alreadyUser = await User.findOne({ email });
     if (alreadyUser) {
       return res.status(409).json("Email already registered");
     }
-    // const newUser = await User.create(req.body);
 
-    // res.status(201).cookie("token", userToken).json(newUser);
-
-    // ====== If the model pre user register works then dont need this ===========
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-    console.log(occupation);
+
     const newUser = new User({
       userName,
       firstName,
@@ -52,13 +45,8 @@ export const register = async (req, res) => {
       },
       process.env.SECRET_KEY
     );
-    const returnUser = user.toObject();
-    delete returnUser.password;
-    console.log(token);
-    res
-      .status(201)
-      .cookie("token", token, { httpOnly: true })
-      .json({ token, returnUser });
+
+    res.status(201).json({ token, user });
   } catch (err) {
     res.status(400).json({ message: "That didn't quite work", err });
   }
@@ -69,7 +57,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // find user
-    const user = await User.findOne({ email: email }).select('+password');
+    const user = await User.findOne({ email: email }).select("+password");
 
     // if no user
     if (!user) return res.status(400).json({ message: "User does not exist" });
@@ -85,14 +73,8 @@ export const login = async (req, res) => {
       },
       process.env.SECRET_KEY
     );
-    const returnUser = user.toObject();
-    delete returnUser.password;
-    // console.log(returnUser);
     console.log(token);
-    res
-      .status(200)
-      .cookie("token", token, { httpOnly: true })
-      .json({ token, returnUser });
+    res.status(200).json({ token, user });
   } catch (err) {
     res.status(400).json({ message: "Login failed", err });
   }
@@ -101,11 +83,10 @@ export const login = async (req, res) => {
 // ========= GET ONE USER ==========
 export const getOneUser = async (req, res) => {
   try {
-    const {_id} = req.params;
-    console.log(_id); 
-    const user = await User.findOne({_id : _id});
-    
-    
+    const { _id } = req.params;
+    console.log(_id);
+    const user = await User.findOne({ _id: _id });
+
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ message: "Get One User failed", err });

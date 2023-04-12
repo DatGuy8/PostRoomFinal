@@ -27,10 +27,10 @@ const LoginForm = () => {
     axios
       .post("http://localhost:8080/api/users/login", values)
       .then((res) => {
-        console.log(res.data.returnUser);
+        console.log(res.data.user);
         dispatch(
           setLogin({
-            user: res.data.returnUser,
+            user: res.data.user,
             token: res.data.token,
           })
         );

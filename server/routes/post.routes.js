@@ -7,7 +7,7 @@ import {
   searchPosts,
 } from "../controllers/post.controller.js";
 
-import User from "../models/user.js";
+import { verifyToken } from "../config/verify.middleware.js";
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
@@ -24,8 +24,8 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-router.get('/', getAllPosts);
-router.post("/create", upload.single("photo"), createPost);
+router.get('/',verifyToken, getAllPosts);
+router.post("/create",verifyToken, upload.single("photo"), createPost);
 router.patch('/:_id/like/:userId', likePost);
 
 export default router;
