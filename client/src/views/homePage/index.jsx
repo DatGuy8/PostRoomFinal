@@ -4,6 +4,7 @@ import NavBar from "views/navBar";
 import UserWidget from "widgets/UserWidget";
 import AddPostWidget from "widgets/AddPostWidget";
 import AllPostsWidget from "widgets/AllPostsWidget";
+import FriendsListWidget from "widgets/FriendsListWidget";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
@@ -34,7 +35,7 @@ const HomePage = () => {
         {isNonMobileScreens && (
           <Box flexBasis="26%">
             Ad space
-            <Box m='2rem 0'> and Friends list</Box>
+            <Box m='2rem 0'> <FriendsListWidget/></Box>
           </Box>
         )}
       </Box>
