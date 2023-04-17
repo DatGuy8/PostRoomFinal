@@ -26,7 +26,6 @@ const UserWidget = ({ userId, userPhoto }) => {
     axios
       .get(`http://localhost:8080/api/users/get/${userId}`)
       .then((res) => {
-        console.log("UserWidget response", res);
         setUser(res.data);
       })
       .catch((err) => {

@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please provide your location"],
     },
     allPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     occupation: String,
   },
   { timestamps: true }

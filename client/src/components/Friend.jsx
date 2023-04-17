@@ -6,6 +6,7 @@ import UserProfilePhoto from "./UserProfilePhoto";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setFriends } from "state/user";
+import { useEffect } from "react";
 
 const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
   const navigate = useNavigate();
@@ -17,8 +18,9 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-  const isFriend = true;
-  // const isFriend = friends.length < 1 ? false : !!friends.find(friend => friend._id === friendId);
+  // const isFriend = true;
+  const isFriend = Array.isArray(friends) ? friends.find(friend => friend._id === friendId) : true;
+
   const isUser = _id === friendId;
 
   const patchFriend = () => {
@@ -61,9 +63,9 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
         {isUser ? (
           <EditOutlined sx={{ color: primaryDark }} />
         ) : isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} onClick={patchFriend} />
+          <PersonRemoveOutlined sx={{ color: primaryDark }} onClick={() => patchFriend()}/>
         ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} onClick={patchFriend} />
+          <PersonAddOutlined sx={{ color: primaryDark }} onClick={() => patchFriend()}/>
         )}
       </IconButton>
     </FlexBox>

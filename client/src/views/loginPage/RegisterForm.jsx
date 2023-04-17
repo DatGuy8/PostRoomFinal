@@ -52,6 +52,7 @@ const RegisterForm = () => {
           setLogin({
             user: res.data.user,
             token: res.data.token,
+            friends: res.data.friends
           })
         );
         navigate("/home");

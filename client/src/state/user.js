@@ -6,7 +6,7 @@ export const userSlice = createSlice({
     mode: "light",
     user: null,
     token: null,
-    friends: []
+    friends: null,
   },
   reducers: {
     setMode: (state) => {
@@ -15,14 +15,16 @@ export const userSlice = createSlice({
     setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      state.friends = action.payload.friends
     },
-    setFriends: (state, action)=>{
-      console.log(action.payload.friends.length);
+    setFriends: (state, action) => {
+      console.log('in state', action.payload.friends);
       state.friends = action.payload.friends;
     },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+      state.friends = null;
     },
     setPosts: (state, action) => {
       state.posts = action.payload.posts;

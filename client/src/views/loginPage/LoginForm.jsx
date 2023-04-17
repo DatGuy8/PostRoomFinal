@@ -32,6 +32,7 @@ const LoginForm = () => {
           setLogin({
             user: res.data.user,
             token: res.data.token,
+            friends: res.data.friends,
           })
         );
         navigate("/home");
@@ -39,13 +40,6 @@ const LoginForm = () => {
       .catch((err) => {
         console.log("Error happened here", err);
       });
-  };
-
-  const onChangeHandler = (event) => {
-    setForm({
-      ...form,
-      [event.target.name]: event.target.value,
-    });
   };
 
   return (

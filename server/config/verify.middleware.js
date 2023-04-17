@@ -9,7 +9,7 @@ export const verifyToken = async (req, res, next) => {
     }
 
     if (token.startsWith("Bearer ")) {
-      console.log("CHECKING TOKEN");
+      // console.log("CHECKING TOKEN");
       token = token.slice(7, token.length).trimLeft();
     }
 

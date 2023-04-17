@@ -57,7 +57,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // find user
-    const user = await User.findOne({ email: email }).select("+password");
+    const user = await User.findOne({ email: email }).select("+password").populate('friends');
 
     // if no user
     if (!user) return res.status(400).json({ message: "User does not exist" });
@@ -98,7 +98,9 @@ export const getFriends = async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId).populate('friends');
-    
+
+    console.log(user.friends.length);
+
     res.status(200).json(user.friends)
   } catch (err) {
     res.status(400).json({ message: "Get Friends failed", err });
@@ -111,7 +113,7 @@ export const patchFriend = async (req, res) => {
     const { userId, friendId } = req.params;
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
-    
+
     // console.log(user.friends);
     if (user.friends.includes(friendId)) {
       console.log('removing');
@@ -122,13 +124,20 @@ export const patchFriend = async (req, res) => {
       user.friends.push(friendId);
       friend.friends.push(userId);
     }
-    
-    // console.log(user.friends);
+
     await user.save();
     await friend.save();
     await user.populate('friends');
-    
-    res.status(200).json({friends: user.friends});
+
+    const formattedFriends = user.friends.map(
+      ({ _id, firstName, lastName, occupation, location }) => {
+        return { _id, firstName, lastName, occupation, location }
+      }
+    );
+    // console.log(user.friends);
+    // console.log('==================================');
+    // console.log(formattedFriends);
+    res.status(200).json({ friends: user.friends });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
