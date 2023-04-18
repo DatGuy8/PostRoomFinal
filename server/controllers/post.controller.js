@@ -7,7 +7,8 @@ export const createPost = async (req, res) => {
   try {
     const { title, userId } = req.body;
     const photo = req.file?.filename;
-    console.log(photo);
+    
+    const user = await User.findById(userId);
     // const post = await Post.create(req.body);
     // const photoUrl = await cloudinary.uploader.upload(photo);
     // console.log(photoUrl);
@@ -17,6 +18,10 @@ export const createPost = async (req, res) => {
       userId,
       photo,
     });
+
+    user.allPosts.push(newPost._id);
+    user.save();
+    // console.log(await user.populate('allPosts'));
 
     // gets all post to update client side with new post
     const allPosts = await Post.find().sort("-createdAt").populate('comments').populate("userId");
