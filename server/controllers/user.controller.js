@@ -129,14 +129,8 @@ export const patchFriend = async (req, res) => {
     await friend.save();
     await user.populate('friends');
 
-    const formattedFriends = user.friends.map(
-      ({ _id, firstName, lastName, occupation, location }) => {
-        return { _id, firstName, lastName, occupation, location }
-      }
-    );
-    // console.log(user.friends);
-    // console.log('==================================');
-    // console.log(formattedFriends);
+    
+    
     res.status(200).json({ friends: user.friends });
   } catch (err) {
     res.status(404).json({ message: err.message });

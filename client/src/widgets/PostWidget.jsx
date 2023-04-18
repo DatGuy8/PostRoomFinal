@@ -77,7 +77,7 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetBox m="2rem 0">
+    <WidgetBox mt="0" mb='2rem'>
       <Friend
         friendId={postUserId}
         name={postUserFullName}

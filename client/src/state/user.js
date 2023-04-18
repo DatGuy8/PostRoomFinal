@@ -18,7 +18,6 @@ export const userSlice = createSlice({
       state.friends = action.payload.friends
     },
     setFriends: (state, action) => {
-      console.log('in state', action.payload.friends);
       state.friends = action.payload.friends;
     },
     setLogout: (state) => {

@@ -1,4 +1,8 @@
-import { PersonAddOutlined, PersonRemoveOutlined, EditOutlined } from "@mui/icons-material";
+import {
+  PersonAddOutlined,
+  PersonRemoveOutlined,
+  EditOutlined,
+} from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import FlexBox from "./FlexBox";
@@ -13,32 +17,41 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
   const dispatch = useDispatch();
   const { _id } = useSelector((state) => state.user);
   const friends = useSelector((state) => state.friends);
+
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-  // const isFriend = true;
-  const isFriend = Array.isArray(friends) ? friends.find(friend => friend._id === friendId) : true;
+
+  const isFriend = Array.isArray(friends)
+    ? friends.some((friend) => friend._id === friendId)
+    : false;
 
   const isUser = _id === friendId;
 
   const patchFriend = () => {
-    axios.patch(`http://localhost:8080/api/users/${_id}/${friendId}`)
+    axios
+      .patch(`http://localhost:8080/api/users/${_id}/${friendId}`)
       .then((res) => {
         console.log(res.data);
-        dispatch(setFriends({ friends: res.data }))
+        dispatch(setFriends(res.data));
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
+      });
+  };
 
   return (
     <FlexBox>
       <FlexBox gap="1rem">
         <UserProfilePhoto userPhoto={friendPicture} size="55px" />
-        <Box>
+        <Box
+          onClick={() => {
+            navigate(`/profile/${friendId}`);
+            navigate(0);
+          }}
+        >
           <Typography
             color={main}
             variant="h5"
@@ -52,20 +65,25 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
           >
             {name}
           </Typography>
-          <Typography color={medium} fontSize="0.75rem" onClick={() => console.log(friends)}>
+          <Typography
+            color={medium}
+            fontSize="0.75rem"
+            onClick={() => console.log(friends)}
+          >
             {friendLocation}
           </Typography>
         </Box>
       </FlexBox>
       <IconButton
         sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+        onClick={() => (isUser ? navigate(`/profile/${_id}`) : patchFriend())}
       >
         {isUser ? (
           <EditOutlined sx={{ color: primaryDark }} />
         ) : isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} onClick={() => patchFriend()}/>
+          <PersonRemoveOutlined sx={{ color: primaryDark }} />
         ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} onClick={() => patchFriend()}/>
+          <PersonAddOutlined sx={{ color: primaryDark }} />
         )}
       </IconButton>
     </FlexBox>

@@ -4,12 +4,12 @@ import PostWidget from "./PostWidget";
 import axios from "axios";
 import { setPosts } from "state/user";
 
-const AllPostsWidget = ({ userId }) => {
+const AllPostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const posts = useSelector((state) => state.posts);
 
-  useEffect(() => {
+  const getAllPosts = () => {
     axios
       .get(`http://localhost:8080/api/posts`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -21,7 +21,31 @@ const AllPostsWidget = ({ userId }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+
+  const getUserPosts = () => {
+    axios
+      .get(`http://localhost:8080/api/posts/${userId}/posts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(setPosts({ posts: res.data }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(()=>{
+    if(isProfile){
+      console.log('isProfile');
+      getUserPosts();
+    }
+    else{
+      getAllPosts();
+    }
+  },[])
 
   return (
     <>

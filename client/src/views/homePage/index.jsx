@@ -5,6 +5,7 @@ import UserWidget from "widgets/UserWidget";
 import AddPostWidget from "widgets/AddPostWidget";
 import AllPostsWidget from "widgets/AllPostsWidget";
 import FriendsListWidget from "widgets/FriendsListWidget";
+import AdSpaceWidget from "widgets/AdSpaceWidget";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
@@ -34,7 +35,7 @@ const HomePage = () => {
         {/* FRIENDS LIST APPEARS ON DESKTOP ONLY */}
         {isNonMobileScreens && (
           <Box flexBasis="26%">
-            Ad space
+            <AdSpaceWidget/>
             <Box m='2rem 0'> <FriendsListWidget/></Box>
           </Box>
         )}

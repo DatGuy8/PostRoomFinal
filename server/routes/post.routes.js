@@ -2,6 +2,7 @@ import express from "express";
 import {
   createPost,
   getAllPosts,
+  getAllUserPosts,
   getOnePost,
   likePost,
   searchPosts,
@@ -26,6 +27,7 @@ const router = express.Router();
 
 router.get('/',verifyToken, getAllPosts);
 router.post("/create",verifyToken, upload.single("photo"), createPost);
+router.get('/:_id/posts',verifyToken, getAllUserPosts);
 router.patch('/:_id/like/:userId', likePost);
 
 export default router;

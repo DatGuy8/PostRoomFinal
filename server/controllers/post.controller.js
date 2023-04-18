@@ -7,7 +7,7 @@ export const createPost = async (req, res) => {
   try {
     const { title, userId } = req.body;
     const photo = req.file?.filename;
-    
+
     const user = await User.findById(userId);
     // const post = await Post.create(req.body);
     // const photoUrl = await cloudinary.uploader.upload(photo);
@@ -24,7 +24,10 @@ export const createPost = async (req, res) => {
     // console.log(await user.populate('allPosts'));
 
     // gets all post to update client side with new post
-    const allPosts = await Post.find().sort("-createdAt").populate('comments').populate("userId");
+    const allPosts = await Post.find()
+      .sort("-createdAt")
+      .populate("comments")
+      .populate("userId");
     res.status(201).json(allPosts);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -34,7 +37,10 @@ export const createPost = async (req, res) => {
 //========= GET ALL POSTS ==========
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort("-createdAt").populate("userId").populate('comments');
+    const posts = await Post.find()
+      .sort("-createdAt")
+      .populate("userId")
+      .populate("comments");
     res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -45,6 +51,26 @@ export const getAllPosts = async (req, res) => {
 export const getOnePost = async (req, res) => {
   try {
   } catch (err) {}
+};
+
+//============= GET ALL POSTS FROM ONE USER ==================
+export const getAllUserPosts = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const user = await User.findById(_id).populate({
+      path: "allPosts",
+      populate: {
+        path: "userId",
+        model: "User",
+      },
+    });
+    
+
+    console.log(user.allPosts);
+    res.status(200).json(user.allPosts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 //======== LIKE A POST ===========
@@ -64,7 +90,7 @@ export const likePost = async (req, res) => {
       _id,
       { likes: post.likes },
       { new: true }
-    ).populate('userId');
+    ).populate("userId");
 
     res.status(200).json(updatedPost);
   } catch (err) {
