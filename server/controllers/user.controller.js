@@ -57,7 +57,9 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // find user
-    const user = await User.findOne({ email: email }).select("+password").populate('friends');
+    const user = await User.findOne({ email: email })
+      .select("+password")
+      .populate("friends");
 
     // if no user
     if (!user) return res.status(400).json({ message: "User does not exist" });
@@ -97,15 +99,15 @@ export const getOneUser = async (req, res) => {
 export const getFriends = async (req, res) => {
   try {
     const { userId } = req.params;
-    const user = await User.findById(userId).populate('friends');
+    const user = await User.findById(userId).populate("friends");
 
     console.log(user.friends.length);
 
-    res.status(200).json(user.friends)
+    res.status(200).json(user.friends);
   } catch (err) {
     res.status(400).json({ message: "Get Friends failed", err });
   }
-}
+};
 
 //================= ADD/REMOVE FRIEND =======================
 export const patchFriend = async (req, res) => {
@@ -116,23 +118,38 @@ export const patchFriend = async (req, res) => {
 
     // console.log(user.friends);
     if (user.friends.includes(friendId)) {
-      console.log('removing');
+      console.log("removing");
       user.friends.pull(friendId);
       friend.friends.pull(userId);
     } else {
-      console.log('adding');
+      console.log("adding");
       user.friends.push(friendId);
       friend.friends.push(userId);
     }
 
     await user.save();
     await friend.save();
-    await user.populate('friends');
+    await user.populate("friends");
 
-    
-    
     res.status(200).json({ friends: user.friends });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
-}
+};
+
+//===================== CHANGE USERPHOTO ==============
+export const changeUserPhoto = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const photo = req.file.filename;
+
+    const user = await User.findByIdAndUpdate(
+      _id,
+      { userPhoto: photo },
+      { new: true }
+    );
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};

@@ -25,6 +25,9 @@ export const userSlice = createSlice({
       state.token = null;
       state.friends = null;
     },
+    setUpdateUser: (state,action)=>{
+      state.user = action.payload.user;
+    },
     setPosts: (state, action) => {
       state.posts = action.payload.posts;
     },
@@ -38,7 +41,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends } =
+export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends,setUpdateUser } =
   userSlice.actions;
 
 export default userSlice.reducer;

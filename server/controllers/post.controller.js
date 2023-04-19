@@ -90,7 +90,7 @@ export const likePost = async (req, res) => {
       _id,
       { likes: post.likes },
       { new: true }
-    ).populate("userId");
+    ).populate("userId").populate('comments');
 
     res.status(200).json(updatedPost);
   } catch (err) {

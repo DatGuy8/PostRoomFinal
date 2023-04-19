@@ -36,7 +36,7 @@ const HomePage = () => {
         {isNonMobileScreens && (
           <Box flexBasis="26%">
             <AdSpaceWidget/>
-            <Box m='2rem 0'> <FriendsListWidget/></Box>
+            <Box m='2rem 0'> <FriendsListWidget isUser={true}/></Box>
           </Box>
         )}
       </Box>
