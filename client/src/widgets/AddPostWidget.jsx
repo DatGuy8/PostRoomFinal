@@ -51,6 +51,7 @@ const AddPostWidget = ({ userPhoto }) => {
         dispatch(setPosts({posts: res.data}))
         setImage(null);
         setTitle("");
+        setIsImage(false);
       })
       .catch((err) => {
         console.log(err);

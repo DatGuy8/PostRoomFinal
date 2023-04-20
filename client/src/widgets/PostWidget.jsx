@@ -22,6 +22,7 @@ import WidgetBox from "components/WidgetBox";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state/user";
+import moment from "moment/moment";
 
 const PostWidget = ({
   title,
@@ -47,9 +48,19 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
-  const patchLike = async () => {
+  const addTime = (time) => {
+    const formattedTime = moment(new Date(time)).fromNow();
+    return formattedTime;
+  };
+
+  const patchLike = () => {
     axios
-      .patch(`http://localhost:8080/api/posts/${postId}/like/${loggedInUserId}`)
+      .patch(
+        `http://localhost:8080/api/posts/${postId}/like/${loggedInUserId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         dispatch(setPost({ post: res.data }));
@@ -59,17 +70,21 @@ const PostWidget = ({
       });
   };
 
-  const addComment = () => {
+  const addComment = (e) => {
+    e.preventDefault();
     const commentForm = { comment };
     axios
       .post(
         `http://localhost:8080/api/comments/${loggedInUserId}/comments/${postId}`,
-        commentForm
+        commentForm,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((res) => {
         console.log(res.data);
         dispatch(setPost({ post: res.data }));
-        setComment('')
+        setComment("");
       })
       .catch((err) => {
         console.log(err);
@@ -77,7 +92,7 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetBox m='2rem 0'>
+    <WidgetBox m="2rem 0">
       <Friend
         friendId={postUserId}
         name={postUserFullName}
@@ -119,35 +134,45 @@ const PostWidget = ({
           <ShareOutlined />
         </IconButton>
       </FlexBox>
+      <Divider />
       {isComment && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
             <Box key={`${title}-${i}`}>
-              <Divider />
+              <Typography
+                sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}
+                fontWeight={700}
+              >
+                {comment.userId.firstName} {comment.userId.lastName}
+              </Typography>
               <Typography sx={{ color: main, m: "0.5rem", pl: "1rem" }}>
-                {comment.comment}
+                {comment.comment} {addTime(comment.createdAt)}
               </Typography>
             </Box>
           ))}
-          <Divider />
-          <FlexBox position="relative">
-            <InputBase
-              placeholder="Add a comment..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              sx={{
-                backgroundColor: palette.neutral.light,
-                width: "100%",
-                padding: "1rem 2rem",
-                borderRadius: "2rem",
-              }}
-            />
-            <IconButton
-              sx={{ position: "absolute", right: 0 }}
-              onClick={addComment}
+
+          <FlexBox>
+            <form
+              onSubmit={addComment}
+              style={{ position: "relative", width: "100%" }}
             >
-              <SendRoundedIcon />
-            </IconButton>
+              <InputBase
+                placeholder="Add a comment..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                sx={{
+                  backgroundColor: palette.neutral.light,
+                  width: "100%",
+                  padding: "1rem 2rem",
+                  borderRadius: "2rem",
+                }}
+              />
+              <IconButton
+                sx={{ position: "absolute", right: 0, top: 0, bottom: 0 }}
+              >
+                <SendRoundedIcon />
+              </IconButton>
+            </form>
           </FlexBox>
         </Box>
       )}

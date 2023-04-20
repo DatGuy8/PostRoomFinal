@@ -31,6 +31,7 @@ const UserWidget = ({ userId, userPhoto }) => {
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const token = useSelector((state)=>state.token);
 
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -38,7 +39,9 @@ const UserWidget = ({ userId, userPhoto }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/users/get/${userId}`)
+      .get(`http://localhost:8080/api/users/get/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         setUser(res.data);
       })
@@ -56,6 +59,8 @@ const UserWidget = ({ userId, userPhoto }) => {
       .then((res) => {
         console.log("user added photo", res);
         dispatch(setUpdateUser({ user: res.data }));
+        setAddUserPhoto(null);
+        setIsImage(false);
       })
       .catch((err) => {
         console.log("edit user photo", err);

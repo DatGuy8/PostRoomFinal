@@ -26,11 +26,11 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-router.get("/friends/:userId", getFriends);
-router.get("/get/:_id", getOneUser);
+router.get("/friends/:userId",verifyToken, getFriends);
+router.get("/get/:_id",verifyToken, getOneUser);
 router.post("/register", register);
 router.post("/login", login);
-router.patch("/changephoto/:_id", upload.single("photo"), changeUserPhoto);
-router.patch("/:userId/:friendId", patchFriend);
+router.patch("/changephoto/:_id",verifyToken, upload.single("photo"), changeUserPhoto);
+router.patch("/:userId/:friendId",verifyToken, patchFriend);
 
 export default router;

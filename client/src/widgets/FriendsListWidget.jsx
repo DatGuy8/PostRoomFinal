@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFriends } from "state/user";
 import Friend from "components/Friend";
@@ -8,8 +8,9 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 const FriendsListWidget = ({ friendId, isUser = false }) => {
-  const [friendsFriends,setFriendsFriends] = useState([])
+  const [friendsFriends, setFriendsFriends] = useState([]);
   const { _id } = useSelector((state) => state.user);
+  const token = useSelector((state)=> state.token);
 
   let friends = useSelector((state) => state.friends);
   const dispatch = useDispatch();
@@ -17,7 +18,12 @@ const FriendsListWidget = ({ friendId, isUser = false }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/users/friends/${isUser ? _id : friendId}`)
+      .get(
+        `http://localhost:8080/api/users/friends/${isUser ? _id : friendId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         if (isUser) {
           dispatch(setFriends({ friends: res.data }));

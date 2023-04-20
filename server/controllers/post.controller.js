@@ -40,7 +40,13 @@ export const getAllPosts = async (req, res) => {
     const posts = await Post.find()
       .sort("-createdAt")
       .populate("userId")
-      .populate("comments");
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
     res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -57,17 +63,17 @@ export const getOnePost = async (req, res) => {
 export const getAllUserPosts = async (req, res) => {
   try {
     const { _id } = req.params;
-    const user = await User.findById(_id).populate({
-      path: "allPosts",
+    const posts = await Post.find({userId : _id}).populate("userId").populate({
+      path: "comments",
       populate: {
         path: "userId",
         model: "User",
       },
     });
+    // console.log(posts);
     
-
-    console.log(user.allPosts);
-    res.status(200).json(user.allPosts);
+    
+    res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -90,7 +96,9 @@ export const likePost = async (req, res) => {
       _id,
       { likes: post.likes },
       { new: true }
-    ).populate("userId").populate('comments');
+    )
+      .populate("userId")
+      .populate("comments");
 
     res.status(200).json(updatedPost);
   } catch (err) {

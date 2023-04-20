@@ -28,6 +28,6 @@ const router = express.Router();
 router.get('/',verifyToken, getAllPosts);
 router.post("/create",verifyToken, upload.single("photo"), createPost);
 router.get('/:_id/posts',verifyToken, getAllUserPosts);
-router.patch('/:_id/like/:userId', likePost);
+router.patch('/:_id/like/:userId',verifyToken, likePost);
 
 export default router;
