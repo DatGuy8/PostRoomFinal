@@ -12,11 +12,18 @@ import axios from "axios";
 import { setFriends } from "state/user";
 import { useEffect } from "react";
 
-const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
+const Friend = ({
+  friendPicture,
+  friendLocation,
+  name,
+  friendId,
+  isProfilePage = false,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { _id } = useSelector((state) => state.user);
   const friends = useSelector((state) => state.friends);
+  const token = useSelector((state) => state.token);
 
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
@@ -32,7 +39,13 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
 
   const patchFriend = () => {
     axios
-      .patch(`http://localhost:8080/api/users/${_id}/${friendId}`)
+      .patch(
+        `http://localhost:8080/api/users/${friendId}/friends`,
+        { userId: _id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         dispatch(setFriends(res.data));
@@ -49,7 +62,6 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
         <Box
           onClick={() => {
             navigate(`/profile/${friendId}`);
-            navigate(0);
           }}
         >
           <Typography
@@ -74,18 +86,22 @@ const Friend = ({ friendPicture, friendLocation, name, friendId }) => {
           </Typography>
         </Box>
       </FlexBox>
-      <IconButton
-        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-        onClick={() => (isUser ? navigate(`/profile/${_id}`) : patchFriend())}
-      >
-        {isUser ? (
-          <EditOutlined sx={{ color: primaryDark }} />
-        ) : isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} />
-        )}
-      </IconButton>
+
+      {/* IF PROFILE PAGE RETURN NOTHING */}
+      {!isProfilePage ? (
+        <IconButton
+          sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+          onClick={() => (isUser ? navigate(`/profile/${_id}`) : patchFriend())}
+        >
+          {isUser ? (
+            <EditOutlined sx={{ color: primaryDark }} />
+          ) : isFriend ? (
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          ) : (
+            <PersonAddOutlined sx={{ color: primaryDark }} />
+          )}
+        </IconButton>
+      ) : null}
     </FlexBox>
   );
 };

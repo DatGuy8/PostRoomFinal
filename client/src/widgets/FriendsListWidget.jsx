@@ -7,35 +7,50 @@ import WidgetBox from "components/WidgetBox";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useParams } from "react-router-dom";
 
-const FriendsListWidget = ({ friendId, isUser = false }) => {
+const FriendsListWidget = ({ friendId, isProfilePage = false }) => {
   const [friendsFriends, setFriendsFriends] = useState([]);
   const { _id } = useSelector((state) => state.user);
-  const token = useSelector((state)=> state.token);
-
+  const token = useSelector((state) => state.token);
   let friends = useSelector((state) => state.friends);
   const dispatch = useDispatch();
   const { palette } = useTheme();
 
-  useEffect(() => {
+  const isUser = _id === friendId;
+  console.log('ASDFASDf',isUser);
+
+  const getUserFriends = () => {
     axios
-      .get(
-        `http://localhost:8080/api/users/friends/${isUser ? _id : friendId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get(`http://localhost:8080/api/users/friends/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
-        if (isUser) {
-          dispatch(setFriends({ friends: res.data }));
-        } else {
-          setFriendsFriends(res.data);
-          console.log(res.data);
-        }
+        dispatch(setFriends({ friends: res.data }));
       })
       .catch((err) => {
-        console.log("friendsListWidget error", err);
+        console.log("friendsList", err);
       });
-  }, []);
+  };
+
+  const getProfilePageFriends = () => {
+    axios
+      .get(`http://localhost:8080/api/users/friends/${friendId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setFriendsFriends(res.data);
+      })
+      .catch((err) => {
+        console.log("friendsList", err);
+      });
+  };
+
+  useEffect(() => {
+    if (isProfilePage) {
+      getProfilePageFriends();
+    } else {
+      getUserFriends();
+    }
+  }, [friendId]);
 
   // if (!friends && !friendsFriends) return null;
 
@@ -50,17 +65,18 @@ const FriendsListWidget = ({ friendId, isUser = false }) => {
         Friend List
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {isUser
-          ? friends?.map((friend) => (
+        {isProfilePage
+          ? friendsFriends?.map((friend) => (
               <Friend
                 key={friend._id}
                 friendId={friend._id}
                 name={`${friend.firstName} ${friend.lastName}`}
                 friendLocation={friend.location}
                 friendPicture={friend.userPhoto}
+                isProfilePage={isUser? false : true}
               />
             ))
-          : friendsFriends?.map((friend) => (
+          : friends?.map((friend) => (
               <Friend
                 key={friend._id}
                 friendId={friend._id}

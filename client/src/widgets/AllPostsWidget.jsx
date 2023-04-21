@@ -45,7 +45,7 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
     else{
       getAllPosts();
     }
-  },[])
+  },[userId])
 
   return (
     <>

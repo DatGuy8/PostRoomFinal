@@ -27,15 +27,17 @@ const UserWidget = ({ userId, userPhoto }) => {
   const [user, setUser] = useState(null);
   const [isImage, setIsImage] = useState(false);
   const [addUserPhoto, setAddUserPhoto] = useState(null);
-  const { palette } = useTheme();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const token = useSelector((state)=>state.token);
+  const token = useSelector((state) => state.token);
 
+  const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
+
+  const isUser = userId === _id;
 
   useEffect(() => {
     axios
@@ -48,7 +50,7 @@ const UserWidget = ({ userId, userPhoto }) => {
       .catch((err) => {
         console.log("UserWidget error", err);
       });
-  }, []);
+  }, [userId]);
 
   const handleUserPhoto = () => {
     const imageForm = new FormData();
@@ -90,7 +92,7 @@ const UserWidget = ({ userId, userPhoto }) => {
             {firstName} {lastName}
           </Typography>
         </FlexBox>
-        <EditOutlined onClick={() => setIsImage(!isImage)} />
+        {isUser ? <ManageAccountsOutlined onClick={() => setIsImage(!isImage)} /> : null}
       </FlexBox>
       <Divider />
 

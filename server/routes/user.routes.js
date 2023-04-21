@@ -31,6 +31,6 @@ router.get("/get/:_id",verifyToken, getOneUser);
 router.post("/register", register);
 router.post("/login", login);
 router.patch("/changephoto/:_id",verifyToken, upload.single("photo"), changeUserPhoto);
-router.patch("/:userId/:friendId",verifyToken, patchFriend);
+router.patch("/:friendId/friends",verifyToken, patchFriend);
 
 export default router;

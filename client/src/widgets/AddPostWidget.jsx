@@ -48,7 +48,7 @@ const AddPostWidget = ({ userPhoto }) => {
       })
       .then((res) => {
         console.log(res);
-        dispatch(setPosts({posts: res.data}))
+        dispatch(setPosts({ posts: res.data }));
         setImage(null);
         setTitle("");
         setIsImage(false);
@@ -145,11 +145,11 @@ const AddPostWidget = ({ userPhoto }) => {
             borderRadius: "3rem",
           }}
         >
-          Post
+          <Typography color="black" p='0.3rem'>Create Post</Typography>
         </Button>
       </FlexBox>
     </WidgetBox>
-  );
+  ); 
 };
 
 export default AddPostWidget;

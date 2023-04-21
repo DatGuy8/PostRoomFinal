@@ -63,16 +63,17 @@ export const getOnePost = async (req, res) => {
 export const getAllUserPosts = async (req, res) => {
   try {
     const { _id } = req.params;
-    const posts = await Post.find({userId : _id}).populate("userId").populate({
-      path: "comments",
-      populate: {
-        path: "userId",
-        model: "User",
-      },
-    });
+    const posts = await Post.find({ userId: _id })
+      .populate("userId")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
     // console.log(posts);
-    
-    
+
     res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -82,7 +83,8 @@ export const getAllUserPosts = async (req, res) => {
 //======== LIKE A POST ===========
 export const likePost = async (req, res) => {
   try {
-    const { _id, userId } = req.params;
+    const { _id } = req.params;
+    const { userId } = req.body;
     const post = await Post.findById(_id);
     const isLiked = post.likes.get(userId);
 

@@ -20,7 +20,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/users/get/${_id}`)
+      .get(`http://localhost:8080/api/users/get/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         setUser(res.data);
         console.log(res.data);
@@ -28,15 +30,16 @@ const ProfilePage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [_id]);
 
   if (!user) return null;
   const isUser = _id === currentUser._id;
-  console.log("profilePAge", isUser);
+  
 
   return (
     <Box>
       <NavBar />
+
       <Box
         width="100%"
         padding="2rem 6%"
@@ -44,11 +47,13 @@ const ProfilePage = () => {
         gap="2rem"
         justifyContent="center"
       >
+
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={user._id} userPhoto={user.userPhoto} />
           <Box m="2rem 0" />
-          <FriendsListWidget friendId={_id} isUser={false}/>
+          <FriendsListWidget friendId={_id} isProfilePage={true}/>
         </Box>
+
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
@@ -57,8 +62,9 @@ const ProfilePage = () => {
           <Box m="2rem 0" />
           <AllPostsWidget userId={user._id} isProfile="true" _id={_id} />
         </Box>
+
       </Box>
-      ProfilePage Add edit profile pic here
+      
     </Box>
   );
 };

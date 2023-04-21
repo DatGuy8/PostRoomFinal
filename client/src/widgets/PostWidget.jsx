@@ -48,7 +48,7 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
-  const addTime = (time) => {
+  const formattedTime = (time) => {
     const formattedTime = moment(new Date(time)).fromNow();
     return formattedTime;
   };
@@ -56,7 +56,8 @@ const PostWidget = ({
   const patchLike = () => {
     axios
       .patch(
-        `http://localhost:8080/api/posts/${postId}/like/${loggedInUserId}`,
+        `http://localhost:8080/api/posts/like/${postId}`,
+        { userId: loggedInUserId },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -146,7 +147,7 @@ const PostWidget = ({
                 {comment.userId.firstName} {comment.userId.lastName}
               </Typography>
               <Typography sx={{ color: main, m: "0.5rem", pl: "1rem" }}>
-                {comment.comment} {addTime(comment.createdAt)}
+                {comment.comment} {formattedTime(comment.createdAt)}
               </Typography>
             </Box>
           ))}
