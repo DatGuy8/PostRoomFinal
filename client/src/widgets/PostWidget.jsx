@@ -31,7 +31,6 @@ const PostWidget = ({
   photo,
   comments,
   likes,
-  viewCount,
   postUserPicture,
   postUserFullName,
   postUserLocation,
@@ -49,8 +48,8 @@ const PostWidget = ({
   const primary = palette.primary.main;
 
   const formattedTime = (time) => {
-    const formattedTime = moment(new Date(time)).fromNow();
-    return formattedTime;
+    return moment(new Date(time)).fromNow();
+    // return moment(time).format('MM/DD/YYYY')
   };
 
   const patchLike = () => {
@@ -139,6 +138,7 @@ const PostWidget = ({
       {isComment && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
+            
             <Box key={`${title}-${i}`}>
               <Typography
                 sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}
@@ -148,7 +148,7 @@ const PostWidget = ({
               </Typography>
               <Typography sx={{ color: main, m: "0.5rem", pl: "1rem" }}>
                 {comment.comment} {formattedTime(comment.createdAt)}
-              </Typography>
+              </Typography>  
             </Box>
           ))}
 
@@ -169,6 +169,7 @@ const PostWidget = ({
                 }}
               />
               <IconButton
+                type="submit"
                 sx={{ position: "absolute", right: 0, top: 0, bottom: 0 }}
               >
                 <SendRoundedIcon />

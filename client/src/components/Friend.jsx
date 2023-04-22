@@ -88,20 +88,18 @@ const Friend = ({
       </FlexBox>
 
       {/* IF PROFILE PAGE RETURN NOTHING */}
-      {!isProfilePage ? (
+      {isUser && !isProfilePage ? null : (
         <IconButton
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-          onClick={() => (isUser ? navigate(`/profile/${_id}`) : patchFriend())}
+          onClick={() => patchFriend()}
         >
-          {isUser ? (
-            <EditOutlined sx={{ color: primaryDark }} />
-          ) : isFriend ? (
+          {isFriend ? (
             <PersonRemoveOutlined sx={{ color: primaryDark }} />
           ) : (
             <PersonAddOutlined sx={{ color: primaryDark }} />
           )}
         </IconButton>
-      ) : null}
+      )}
     </FlexBox>
   );
 };
