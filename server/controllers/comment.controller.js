@@ -1,5 +1,6 @@
 import Comment from "../models/comment.js";
 import Post from "../models/post.js";
+import User from "../models/user.js";
 
 export const addComment = async (req, res) => {
   try {
@@ -11,7 +12,7 @@ export const addComment = async (req, res) => {
       userId,
       postId,
     });
-
+    
     const relatedPost = await Post.findById(postId)
       .populate("userId")
       .populate({
@@ -23,11 +24,12 @@ export const addComment = async (req, res) => {
       });
 
     if (relatedPost) {
-      relatedPost.comments.push(newComment);
+      relatedPost.comments.push(await newComment.populate("userId"));
     }
 
     const updatedPost = await relatedPost.save();
-
+    // console.log('================================');
+    // console.log(relatedPost);
     res.status(200).json(updatedPost);
   } catch (err) {
     res.status(404).json({ message: err.message });

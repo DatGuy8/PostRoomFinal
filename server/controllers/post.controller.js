@@ -26,8 +26,14 @@ export const createPost = async (req, res) => {
     // gets all post to update client side with new post
     const allPosts = await Post.find()
       .sort("-createdAt")
-      .populate("comments")
-      .populate("userId");
+      .populate("userId")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
     res.status(201).json(allPosts);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -100,7 +106,13 @@ export const likePost = async (req, res) => {
       { new: true }
     )
       .populate("userId")
-      .populate("comments");
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
 
     res.status(200).json(updatedPost);
   } catch (err) {
