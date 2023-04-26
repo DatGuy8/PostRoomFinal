@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state/user";
 import moment from "moment/moment";
+import { useNavigate } from "react-router-dom";
 
 const PostWidget = ({
   title,
@@ -34,10 +35,12 @@ const PostWidget = ({
   postUserPicture,
   postUserFullName,
   postUserLocation,
+  createdAt,
 }) => {
   const [comment, setComment] = useState("");
   const [isComment, setIsComment] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
@@ -47,9 +50,20 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
-  const formattedTime = (time) => {
-    return moment(new Date(time)).fromNow();
-    // return moment(time).format('MM/DD/YYYY')
+  const commentTime = (time) => {
+    const currentDate = moment();
+    const postDate = moment(time);
+    const timeDifference = postDate.fromNow();
+    const isMoreThanTwoDaysAgo = postDate.isBefore(
+      currentDate.subtract(2, "days")
+    );
+    return isMoreThanTwoDaysAgo
+      ? postDate.format("MM/D/YY")
+      : timeDifference;
+  };
+
+  const postedTime = (time) => {
+    return moment(new Date(time)).format("h:mm a on MM/DD/YY ");
   };
 
   const patchLike = () => {
@@ -99,7 +113,12 @@ const PostWidget = ({
         friendLocation={postUserLocation}
         friendPicture={postUserPicture}
       />
-      <Typography color={main} sx={{ mt: "1rem" }}>
+
+      <Typography
+        // color={main}
+        sx={{ mt: "1rem" }}
+        onClick={() => navigate(`/post/${postId}`)}
+      >
         {title}
       </Typography>
       {photo && (
@@ -109,8 +128,12 @@ const PostWidget = ({
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
           src={`http://localhost:8080/images/${photo}`}
+          onClick={() => navigate(`/post/${postId}`)}
         />
       )}
+      <Typography color={main} variant="h6">
+        Posted at {postedTime(createdAt)}
+      </Typography>
       <FlexBox mt="0.25rem">
         <FlexBox gap="1rem">
           <FlexBox gap="0.3rem">
@@ -138,18 +161,30 @@ const PostWidget = ({
       {isComment && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
-            
-            <Box key={`${title}-${i}`}>
-              <Typography
-                sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}
-                fontWeight={700}
+            <>
+              <Box
+                key={`${title}-${i}`}
+                bgcolor={palette.neutral.light}
+                borderRadius="1rem"
               >
-                {comment.userId.firstName} {comment.userId.lastName}
-              </Typography>
-              <Typography sx={{ color: main, m: "0.5rem", pl: "1rem" }}>
-                {comment.comment} {formattedTime(comment.createdAt)}
-              </Typography>  
-            </Box>
+                <Typography
+                  sx={{ color: main, m: "0.5rem", pl: "1rem" }}
+                  fontWeight={700}
+                >
+                  {comment.userId.firstName} {comment.userId.lastName}
+                </Typography>
+                <Typography sx={{ color: main, m: "0.5rem", pl: "1rem" }}>
+                  {comment.comment}
+                </Typography>
+              </Box>
+              <FlexBox marginLeft="1rem">
+                <FlexBox gap="1rem">
+                  <Typography>like</Typography>
+                  <Typography>reply</Typography>
+                  <Typography>{commentTime(comment.createdAt)}</Typography>
+                </FlexBox>
+              </FlexBox>
+            </>
           ))}
 
           <FlexBox>

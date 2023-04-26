@@ -50,7 +50,7 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
   return (
     <>
       {posts?.map(
-        ({ _id, title, likes, viewCount, comments, photo, userId }) => (
+        ({ _id, title, likes, viewCount, comments, photo, userId, createdAt }) => (
           <PostWidget
             key={_id}
             postId={_id}
@@ -58,6 +58,7 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
             title={title}
             photo={photo}
             comments={comments}
+            createdAt={createdAt}
             viewCount={viewCount}
             likes={likes}
             postUserPicture={userId.userPhoto}

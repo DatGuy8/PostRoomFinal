@@ -9,6 +9,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import LoginPage from "views/loginPage";
 import HomePage from "views/homePage";
 import ProfilePage from "views/profilePage";
+import PostPage from "views/postPage";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -32,6 +33,10 @@ function App() {
             <Route
               path="/profile/:_id"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/post/:_id"
+              element={isAuth ? <PostPage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

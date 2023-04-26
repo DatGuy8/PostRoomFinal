@@ -26,6 +26,7 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router.get('/',verifyToken, getAllPosts);
+router.get("/get/:_id", getOnePost);
 router.post("/create",verifyToken, upload.single("photo"), createPost);
 router.patch('/like/:_id',verifyToken, likePost);
 router.get('/:_id/posts',verifyToken, getAllUserPosts);

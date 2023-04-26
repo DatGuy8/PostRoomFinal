@@ -62,7 +62,20 @@ export const getAllPosts = async (req, res) => {
 //========= GET ONE POST ===========
 export const getOnePost = async (req, res) => {
   try {
-  } catch (err) {}
+    const { _id } = req.params;
+    const post = await Post.findById({ _id })
+      .populate("userId")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 //============= GET ALL POSTS FROM ONE USER ==================
