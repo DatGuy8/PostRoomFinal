@@ -1,6 +1,8 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
+import { Server } from 'socket.io';
+import http from 'http';
 
 import connectDB from './config/connectDB.js';
 import userRouter from './routes/user.routes.js';
@@ -17,13 +19,25 @@ app.use('/api/posts',postRouter);
 app.use('/api/comments',commentRouter);
 app.use('/images', express.static('images'));
 
+const server = http.createServer(app);
+const io = new Server(server, {cors: true});
+
+
+io.on("connection", (socket) =>{
+  console.log('Client Connected!', socket.id);
+  console.log('========================================')
+  socket.on("recievedNewPost",(msg)=>{
+    console.log(msg);
+    io.emit('newPost',msg);
+  })
+})
 
 const startServer = async () => {
   try {
-      connectDB(process.env.MONGODB_URL);
-      app.listen(8080, () => console.log('Server started on port http://localhost:8080'));
+    connectDB(process.env.MONGODB_URL);
+    server.listen(8080, () => console.log('Server started on port http://localhost:8080'));
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 }
 
