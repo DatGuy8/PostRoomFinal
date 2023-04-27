@@ -57,9 +57,7 @@ const PostWidget = ({
     const isMoreThanTwoDaysAgo = postDate.isBefore(
       currentDate.subtract(2, "days")
     );
-    return isMoreThanTwoDaysAgo
-      ? postDate.format("MM/D/YY")
-      : timeDifference;
+    return isMoreThanTwoDaysAgo ? postDate.format("MM/D/YY") : timeDifference;
   };
 
   const postedTime = (time) => {
@@ -76,7 +74,6 @@ const PostWidget = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         dispatch(setPost({ post: res.data }));
       })
       .catch((err) => {
@@ -96,7 +93,6 @@ const PostWidget = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         dispatch(setPost({ post: res.data }));
         setComment("");
       })
@@ -161,12 +157,8 @@ const PostWidget = ({
       {isComment && (
         <Box mt="0.5rem">
           {comments.map((comment, i) => (
-            <>
-              <Box
-                key={`${title}-${i}`}
-                bgcolor={palette.neutral.light}
-                borderRadius="1rem"
-              >
+            <Box key={`${title}-${i}`}>
+              <Box bgcolor={palette.neutral.light} borderRadius="1rem">
                 <Typography
                   sx={{ color: main, m: "0.5rem", pl: "1rem" }}
                   fontWeight={700}
@@ -184,7 +176,7 @@ const PostWidget = ({
                   <Typography>{commentTime(comment.createdAt)}</Typography>
                 </FlexBox>
               </FlexBox>
-            </>
+            </Box>
           ))}
 
           <FlexBox>

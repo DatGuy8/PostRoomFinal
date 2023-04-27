@@ -11,12 +11,16 @@ import UserWidget from "widgets/UserWidget";
 import axios from "axios";
 import AllPostsWidget from "widgets/AllPostsWidget";
 
+
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { _id } = useParams();
   const currentUser = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  
+
+  
 
   useEffect(() => {
     axios
@@ -25,7 +29,6 @@ const ProfilePage = () => {
       })
       .then((res) => {
         setUser(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

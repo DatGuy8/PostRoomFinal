@@ -6,6 +6,7 @@ import AddPostWidget from "widgets/AddPostWidget";
 import AllPostsWidget from "widgets/AllPostsWidget";
 import FriendsListWidget from "widgets/FriendsListWidget";
 import AdSpaceWidget from "widgets/AdSpaceWidget";
+import { useEffect } from "react";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);

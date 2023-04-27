@@ -75,7 +75,7 @@ export const login = async (req, res) => {
       },
       process.env.SECRET_KEY
     );
-    console.log(token);
+
     res.status(200).json({ token, user });
   } catch (err) {
     res.status(400).json({ message: "Login failed", err });
@@ -86,7 +86,7 @@ export const login = async (req, res) => {
 export const getOneUser = async (req, res) => {
   try {
     const { _id } = req.params;
-    console.log(_id);
+
     const user = await User.findOne({ _id: _id });
 
     res.status(200).json(user);
@@ -100,8 +100,6 @@ export const getFriends = async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId).populate("friends");
-
-    console.log(user.friends.length);
 
     res.status(200).json(user.friends);
   } catch (err) {
@@ -117,13 +115,10 @@ export const patchFriend = async (req, res) => {
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
-    // console.log(user.friends);
     if (user.friends.includes(friendId)) {
-      console.log("removing");
       user.friends.pull(friendId);
       friend.friends.pull(userId);
     } else {
-      console.log("adding");
       user.friends.push(friendId);
       friend.friends.push(userId);
     }

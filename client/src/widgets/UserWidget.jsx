@@ -57,9 +57,11 @@ const UserWidget = ({ userId, userPhoto }) => {
     imageForm.append("photo", addUserPhoto);
 
     axios
-      .patch(`http://localhost:8080/api/users/changephoto/${_id}`, imageForm)
+      .patch(`http://localhost:8080/api/users/changephoto/${_id}`, imageForm, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
-        console.log("user added photo", res);
+        // console.log("user added photo", res);
         dispatch(setUpdateUser({ user: res.data }));
         setAddUserPhoto(null);
         setIsImage(false);
@@ -92,7 +94,9 @@ const UserWidget = ({ userId, userPhoto }) => {
             {firstName} {lastName}
           </Typography>
         </FlexBox>
-        {isUser ? <ManageAccountsOutlined onClick={() => setIsImage(!isImage)} /> : null}
+        {isUser ? (
+          <ManageAccountsOutlined onClick={() => setIsImage(!isImage)} />
+        ) : null}
       </FlexBox>
       <Divider />
 

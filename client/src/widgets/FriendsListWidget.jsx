@@ -16,7 +16,6 @@ const FriendsListWidget = ({ friendId, isProfilePage = false }) => {
   const { palette } = useTheme();
 
   const isUser = _id === friendId;
-  console.log('ASDFASDf',isUser);
 
   const getUserFriends = () => {
     axios
