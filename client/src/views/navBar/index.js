@@ -9,6 +9,7 @@ import {
   FormControl,
   useTheme,
   useMediaQuery,
+  Badge,
 } from "@mui/material";
 import {
   Search,
@@ -32,7 +33,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const userName = user.userName;
-
+  console.log(user);
   const { palette } = useTheme();
   const neutral = palette.neutral.light;
   const dark = palette.neutral.dark;
@@ -90,7 +91,9 @@ const NavBar = () => {
             )}
           </IconButton>
           <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
+          <Badge badgeContent={user.notifications?.length} color="success">
+            <Notifications sx={{ fontSize: "25px" }} />
+          </Badge>
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={userName}>
             <Select

@@ -9,17 +9,17 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const posts = useSelector((state) => state.posts);
-  const socket = io(":8080");
-  const [postAdded, setPostAdded] = useState(false);
+  // const socket = io(":8080");
+  // const [postAdded, setPostAdded] = useState(false);
 
-  socket.on("connect", () => {
-    console.log("recieved", socket.id);
-  });
+  // socket.on("connect", () => {
+  //   console.log("recieved", socket.id);
+  // });
 
-  socket.on("newPost", (msg) => {
-    console.log(msg);
-    setPostAdded(!postAdded)
-  });
+  // socket.on("newPost", (msg) => {
+  //   console.log(msg);
+  //   setPostAdded(!postAdded)
+  // });
 
   const getAllPosts = () => {
     axios
@@ -56,7 +56,8 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getAllPosts();
     }
-  }, [postAdded, userId]);
+  }, [userId]);
+  // }, [postAdded, userId]);
 
   return (
     <>

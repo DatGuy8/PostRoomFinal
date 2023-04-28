@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setPosts } from "state/user";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
 const AddPostWidget = ({ userPhoto }) => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const AddPostWidget = ({ userPhoto }) => {
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
 
-  const socket = io(":8080");
+  // const socket = io(":8080");
 
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px");
@@ -56,7 +56,7 @@ const AddPostWidget = ({ userPhoto }) => {
         setImage(null);
         setTitle("");
         setIsImage(false);
-        socket.emit("recievedNewPost",{message: "NEW POST ADDED"})
+        // socket.emit("recievedNewPost",{message: "NEW POST ADDED"})
       })
       .catch((err) => {
         console.log(err);

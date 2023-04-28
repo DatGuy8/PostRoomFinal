@@ -37,6 +37,7 @@ const PostPage = () => {
           photo={post.photo}
           comments={post.comments}
           likes={post.likes}
+          createdAt={post.createdAt}
           postUserPicture={post.userId.userPhoto}
           postUserFullName={post.userId.firstName + " " + post.userId.lastName}
           postUserLocation={post.userId.location}

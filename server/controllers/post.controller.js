@@ -18,11 +18,6 @@ export const createPost = async (req, res) => {
       userId,
       photo,
     });
-
-    user.allPosts.push(newPost._id);
-    user.save();
-    // console.log(await user.populate('allPosts'));
-
     // gets all post to update client side with new post
     const allPosts = await Post.find()
       .sort("-createdAt")

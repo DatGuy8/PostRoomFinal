@@ -6,12 +6,24 @@ import AddPostWidget from "widgets/AddPostWidget";
 import AllPostsWidget from "widgets/AllPostsWidget";
 import FriendsListWidget from "widgets/FriendsListWidget";
 import AdSpaceWidget from "widgets/AdSpaceWidget";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
-  const token = useSelector((state) => state.token);
+  // const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+  const [socket,setSocket] = useState(null);
+  
+  useEffect(()=>{
+    setSocket(io(":8080"));
+  },[]);
+
+  useEffect(()=>{
+    socket?.emit("newUser", user.userName);
+    console.log('emit from client');
+  },[socket, user]);
+
 
   return (
     <Box>

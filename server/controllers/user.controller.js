@@ -1,5 +1,6 @@
 //========== IMPORTS THE MODEL FILE ==============
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
 // ========= ADDS TOKEN FOR USERS ==============
 import jwt from "jsonwebtoken";
 // =========== BCRYPT TO HASH PASSWORDS ==========
@@ -121,11 +122,21 @@ export const patchFriend = async (req, res) => {
     } else {
       user.friends.push(friendId);
       friend.friends.push(userId);
+      const notify = new Notification({
+        user: friendId,
+        sender: userId,
+        type: "friend",
+      });
+      await notify.save();
+      friend.notifications.push(notify);
     }
+
 
     await user.save();
     await friend.save();
     await user.populate("friends");
+
+    console.log(friend);
 
     res.status(200).json({ friends: user.friends });
   } catch (err) {

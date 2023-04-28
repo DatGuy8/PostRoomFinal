@@ -22,14 +22,37 @@ app.use('/images', express.static('images'));
 const server = http.createServer(app);
 const io = new Server(server, {cors: true});
 
+let onlineUsers = [];
+
+const addNewUser = (userName, socketId) => {
+  !onlineUsers.some((user) => user.userName === userName) &&
+    onlineUsers.push({ userName, socketId });
+};
+
+const removeUser = (socketId) => {
+  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (userName) => {
+  return onlineUsers.find((user) => user.userName === userName);
+};
 
 io.on("connection", (socket) =>{
   console.log('Client Connected!', socket.id);
   console.log('========================================')
-  socket.on("recievedNewPost",(msg)=>{
-    console.log(msg);
-    io.emit('newPost',msg);
+  // socket.on("recievedNewPost",(msg)=>{
+  //   console.log(msg);
+  //   io.emit('newPost',msg);
+  // })
+  socket.on("newUser", (userName)=>{
+    addNewUser(userName, socket.id);
+    console.log(onlineUsers);
   })
+
+  socket.on("disconnect", () => {
+    removeUser(socket.id);
+    console.log('disconnected user', onlineUsers);
+  });
 })
 
 const startServer = async () => {

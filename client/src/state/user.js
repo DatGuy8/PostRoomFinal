@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { io } from "socket.io-client";
+
+
 
 export const userSlice = createSlice({
   name: "user",
@@ -24,6 +27,10 @@ export const userSlice = createSlice({
       state.user = null;
       state.token = null;
       state.friends = null;
+      const socket = io(':8080');
+      socket.disconnect();
+      console.log('dis');
+      
     },
     setUpdateUser: (state,action)=>{
       state.user = action.payload.user;
