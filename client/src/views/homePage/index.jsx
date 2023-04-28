@@ -8,6 +8,7 @@ import FriendsListWidget from "widgets/FriendsListWidget";
 import AdSpaceWidget from "widgets/AdSpaceWidget";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { useDispatch } from "react-redux";
 
 const HomePage = () => {
   const user = useSelector((state) => state.user);
@@ -27,7 +28,7 @@ const HomePage = () => {
 
   return (
     <Box>
-      <NavBar />
+      <NavBar notifications={user.notifications}/>
       <Box
         width="100%"
         padding="2rem 6%"

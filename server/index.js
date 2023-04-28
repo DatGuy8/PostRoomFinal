@@ -49,6 +49,16 @@ io.on("connection", (socket) =>{
     console.log(onlineUsers);
   })
 
+  socket.on("notification", ({sender, user, type})=>{
+    const reciever = getUser(receiverName);
+    io.to(reciever.socketId).emit("getNotification",{
+      sender,
+      text
+    })
+  })
+
+  // socket.on("",())
+
   socket.on("disconnect", () => {
     removeUser(socket.id);
     console.log('disconnected user', onlineUsers);

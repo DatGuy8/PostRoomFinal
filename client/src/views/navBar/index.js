@@ -25,15 +25,23 @@ import { setMode, setLogout } from "state/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBox from "components/FlexBox";
+import { io } from "socket.io-client";
 
-const NavBar = () => {
+
+const socket = io(":8080")
+
+const NavBar = ({notifications}) => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const userName = user.userName;
-  console.log(user);
+  console.log('navBar', notifications);
+  const [notifications1, setNotifications1] = useState([]);
+
+
+  //============== COLORS ==================
   const { palette } = useTheme();
   const neutral = palette.neutral.light;
   const dark = palette.neutral.dark;
@@ -41,13 +49,20 @@ const NavBar = () => {
   const light = palette.primary.light;
   const alt = palette.background.alt;
 
-  // const onLogOutHandler = () => {
-  //   axios.post('http://localhost:8080/api/users/logout')
-  //   .then((res)=>{
+  // useEffect(()=>{
+  //   socket.on("notifications", (notifications))
+  // })
 
-  //     dispatch(setLogout());
-  //   })
-  // };
+  socket.on("getNotification", (data)=>{
+    console.log('getNotification', data);
+    setNotifications1(data);
+  })
+  
+
+  const onLogOutHandler = () => {
+    socket.disconnect();
+    dispatch(setLogout());
+  };
 
   return (
     <FlexBox padding="1rem 6%" backgroundColor={alt}>
@@ -90,10 +105,18 @@ const NavBar = () => {
               <LightMode sx={{ fontSize: "25px", color: dark }} />
             )}
           </IconButton>
+
           <Message sx={{ fontSize: "25px" }} />
-          <Badge badgeContent={user.notifications?.length} color="success">
-            <Notifications sx={{ fontSize: "25px" }} />
-          </Badge>
+
+          <IconButton
+            onClick={() => {
+              console.log("clicked");
+            }}
+          >
+            <Badge badgeContent={notifications.length} color="success">
+              <Notifications sx={{ fontSize: "25px" }} />
+            </Badge>
+          </IconButton>
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={userName}>
             <Select
@@ -116,7 +139,7 @@ const NavBar = () => {
               <MenuItem value={userName}>
                 <Typography>{userName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Logout</MenuItem>
+              <MenuItem onClick={onLogOutHandler}>Logout</MenuItem>
             </Select>
           </FormControl>
         </FlexBox>
@@ -125,7 +148,9 @@ const NavBar = () => {
         <IconButton
           onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
         >
-          <Menu />
+          <Badge badgeContent={user.notifications?.length} color="success">
+            <Menu />
+          </Badge>
         </IconButton>
       )}
       {/* NAV FOR SMALLER SCREENS */}
@@ -167,7 +192,16 @@ const NavBar = () => {
             </IconButton>
 
             <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
+
+            <IconButton
+              onClick={() => {
+                console.log("clicked");
+              }}
+            >
+              <Badge badgeContent={notifications?.length} color="success">
+                <Notifications sx={{ fontSize: "25px" }} />
+              </Badge>
+            </IconButton>
             <Help sx={{ fontSize: "25px" }} />
             <FormControl variant="standard" value={userName}>
               <Select
@@ -190,7 +224,7 @@ const NavBar = () => {
                 <MenuItem value={userName}>
                   <Typography>{userName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem onClick={onLogOutHandler}>
                   Logout
                 </MenuItem>
               </Select>

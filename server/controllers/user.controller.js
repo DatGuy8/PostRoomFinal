@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 // =========== BCRYPT TO HASH PASSWORDS ==========
 import bcrypt from "bcrypt";
 
+
 // ========= REGISTER USER ==========
 export const register = async (req, res) => {
   try {
@@ -131,14 +132,16 @@ export const patchFriend = async (req, res) => {
       friend.notifications.push(notify);
     }
 
-
+    
     await user.save();
     await friend.save();
     await user.populate("friends");
 
-    console.log(friend);
 
-    res.status(200).json({ friends: user.friends });
+    // console.log(friend);
+
+    res.status(200).json({ friends: user.friends,
+    notification: friend.notifications });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
