@@ -92,7 +92,7 @@ const Friend = ({
       </FlexBox>
 
       {/* IF PROFILE PAGE RETURN NOTHING */}
-      {isUser && !isProfilePage ? null : (
+      {isProfilePage ? null : (
         <IconButton
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
           onClick={() => patchFriend()}

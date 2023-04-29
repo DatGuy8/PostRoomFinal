@@ -49,13 +49,13 @@ io.on("connection", (socket) =>{
     console.log(onlineUsers);
   })
 
-  socket.on("notification", ({sender, user, type})=>{
-    const reciever = getUser(receiverName);
-    io.to(reciever.socketId).emit("getNotification",{
-      sender,
-      text
-    })
-  })
+  // socket.on("notification", ({sender, user, type})=>{
+  //   const reciever = getUser(user.userName);
+  //   io.to(reciever.socketId).emit("getNotification",{
+  //     sender,
+  //     text
+  //   })
+  // })
 
   // socket.on("",())
 

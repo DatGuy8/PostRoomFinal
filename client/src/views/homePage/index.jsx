@@ -14,17 +14,7 @@ const HomePage = () => {
   const user = useSelector((state) => state.user);
   // const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const [socket,setSocket] = useState(null);
   
-  useEffect(()=>{
-    setSocket(io(":8080"));
-  },[]);
-
-  useEffect(()=>{
-    socket?.emit("newUser", user.userName);
-    console.log('emit from client');
-  },[socket, user]);
-
 
   return (
     <Box>
@@ -35,6 +25,7 @@ const HomePage = () => {
         display={isNonMobileScreens ? "flex" : "block"}
         justifyContent="space-between"
         gap="0.5rem"
+        mt='75px'
       >
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={user._id} userPhoto={user.userPhoto} />

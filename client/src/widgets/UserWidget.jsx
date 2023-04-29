@@ -16,16 +16,19 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
   DeleteOutlined,
+  PersonRemoveOutlined,
+  PersonAddOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Dropzone from "react-dropzone";
-import { setUpdateUser } from "state/user";
+import { setUpdateUser,setFriends } from "state/user";
 
 const UserWidget = ({ userId, userPhoto }) => {
   const [user, setUser] = useState(null);
   const [isImage, setIsImage] = useState(false);
+  const [addFriend, setAddFriend] = useState(false);
   const [addUserPhoto, setAddUserPhoto] = useState(null);
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
@@ -46,11 +49,31 @@ const UserWidget = ({ userId, userPhoto }) => {
       })
       .then((res) => {
         setUser(res.data);
+        console.log('1');
       })
       .catch((err) => {
         console.log("UserWidget error", err);
       });
-  }, [userId]);
+  }, [userId,addFriend]);
+
+  const patchFriend = () => {
+    axios
+      .patch(
+        `http://localhost:8080/api/users/${userId}/friends`,
+        { userId: _id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch(setFriends(res.data));
+        setAddFriend(!addFriend);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleUserPhoto = () => {
     const imageForm = new FormData();
@@ -74,6 +97,11 @@ const UserWidget = ({ userId, userPhoto }) => {
   if (!user) return null;
   const { firstName, lastName, location, userName, occupation, friends } = user;
 
+  const isFriend = Array.isArray(friends)
+    ? friends.some((friend) => friend === _id)
+    : false;
+  console.log("userWidget", isFriend);
+
   return (
     <WidgetBox>
       <FlexBox gap="0.5rem" pb="1.1rem">
@@ -95,8 +123,18 @@ const UserWidget = ({ userId, userPhoto }) => {
           </Typography>
         </FlexBox>
         {isUser ? (
-          <ManageAccountsOutlined onClick={() => setIsImage(!isImage)} />
-        ) : null}
+          <IconButton onClick={() => setIsImage(!isImage)}>
+            <ManageAccountsOutlined />
+          </IconButton>
+        ) : isFriend ? (
+          <IconButton onClick={() => patchFriend()}>
+            <PersonRemoveOutlined sx={{ color: dark }} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={() => patchFriend()}>
+            <PersonAddOutlined sx={{ color: dark }} />
+          </IconButton>
+        )}
       </FlexBox>
       <Divider />
 

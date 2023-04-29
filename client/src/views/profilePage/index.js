@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 import NavBar from "views/navBar";
 import FriendsListWidget from "widgets/FriendsListWidget";
-import PostWidget from "widgets/PostWidget";
 import AddPostWidget from "widgets/AddPostWidget";
 import UserWidget from "widgets/UserWidget";
 import axios from "axios";
@@ -49,6 +48,7 @@ const ProfilePage = () => {
         display={isNonMobileScreens ? "flex" : "block"}
         gap="2rem"
         justifyContent="center"
+        mt="75px"
       >
 
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
