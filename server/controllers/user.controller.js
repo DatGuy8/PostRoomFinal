@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 // =========== BCRYPT TO HASH PASSWORDS ==========
 import bcrypt from "bcrypt";
 
-
 // ========= REGISTER USER ==========
 export const register = async (req, res) => {
   try {
@@ -18,7 +17,6 @@ export const register = async (req, res) => {
       occupation,
       email,
       password,
-      confirmPassword,
     } = req.body;
 
     //==== checks if email already registered =====
@@ -114,6 +112,7 @@ export const patchFriend = async (req, res) => {
   try {
     const { friendId } = req.params;
     const { userId } = req.body;
+    const io  = req.app.get("io");
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
@@ -131,17 +130,20 @@ export const patchFriend = async (req, res) => {
       await notify.save();
       friend.notifications.push(notify);
     }
-
     
     await user.save();
     await friend.save();
     await user.populate("friends");
 
-
+    io.once("connection", (socket)=>{
+      socket.emit("getNotification", "WHY LIKE THAT");
+      console.log("hdhafdsf");
+    });
     // console.log(friend);
-
-    res.status(200).json({ friends: user.friends,
-    notification: friend.notifications });
+    
+    res
+      .status(200)
+      .json({ friends: user.friends, notification: friend.notifications });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

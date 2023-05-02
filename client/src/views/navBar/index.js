@@ -28,7 +28,6 @@ import FlexBox from "components/FlexBox";
 import { io } from "socket.io-client";
 import NotificationWidget from "widgets/NotificationWidget";
 
-// const socket = io(":8080")
 
 const NavBar = ({ notifications }) => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -38,8 +37,8 @@ const NavBar = ({ notifications }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const userName = user.userName;
-  const [notifications1, setNotifications1] = useState([]);
-
+  const [notifications1, setNotifications1] = useState("");
+  
   //============== COLORS ==================
   const { palette } = useTheme();
   const neutral = palette.neutral.light;
@@ -47,6 +46,7 @@ const NavBar = ({ notifications }) => {
   const background = palette.background.default;
   const light = palette.primary.light;
   const alt = palette.background.alt;
+  // const socket = io(":8080");
 
   // useEffect(()=>{
   //   socket.on("notifications", (notifications))
@@ -63,10 +63,15 @@ const NavBar = ({ notifications }) => {
     console.log("emit from client");
   }, [socket, user]);
 
-  // socket.on("getNotification", (data)=>{
+  // // socket.on("getNotification", (data)=>{
   //   console.log('getNotification', data);
   //   setNotifications1(data);
   // })
+
+  socket?.on("getNotification", (msg) => {
+    console.log("ADFASDFASDF", msg);
+    setNotifications1(msg);
+  });
 
   const onLogOutHandler = () => {
     socket.disconnect();
@@ -75,7 +80,14 @@ const NavBar = ({ notifications }) => {
 
   return (
     <>
-      <FlexBox padding="1rem 6%" backgroundColor={alt} position="fixed" top="0" width="100%" zIndex={10}>
+      <FlexBox
+        padding="1rem 6%"
+        backgroundColor={alt}
+        position="fixed"
+        top="0"
+        width="100%"
+        zIndex={10}
+      >
         <FlexBox gap="2rem">
           <Typography
             fontWeight="bold"
@@ -98,7 +110,7 @@ const NavBar = ({ notifications }) => {
               padding="0.1rem 1.5rem"
               gap="3rem"
             >
-              <InputBase placeholder="Search..." />
+              <InputBase placeholder={notifications1} />
               <IconButton>
                 <Search />
               </IconButton>
@@ -208,7 +220,10 @@ const NavBar = ({ notifications }) => {
                   setIsNotificationWidget(!isNotificationWidget);
                 }}
               >
-                <Badge badgeContent={user.notifications?.length} color="success">
+                <Badge
+                  badgeContent={user.notifications?.length}
+                  color="success"
+                >
                   <Notifications sx={{ fontSize: "25px" }} />
                 </Badge>
               </IconButton>
@@ -241,10 +256,7 @@ const NavBar = ({ notifications }) => {
           </Box>
         )}
       </FlexBox>
-      {
-        isNotificationWidget &&
-        <NotificationWidget/> 
-      }
+      {isNotificationWidget && <NotificationWidget />}
     </>
   );
 };

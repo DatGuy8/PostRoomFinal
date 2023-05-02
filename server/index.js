@@ -12,15 +12,16 @@ import commentRouter from './routes/comment.routes.js';
 dotenv.config();
 const app = express();
 app.use(cors());
+const server = http.createServer(app);
+const io = new Server(server, {cors: true});
 
 app.use(express.json({ limit: '50mb' }));
 app.use('/api/users',userRouter);
 app.use('/api/posts',postRouter);
 app.use('/api/comments',commentRouter);
 app.use('/images', express.static('images'));
+app.set("io", io);
 
-const server = http.createServer(app);
-const io = new Server(server, {cors: true});
 
 let onlineUsers = [];
 

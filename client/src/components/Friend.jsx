@@ -11,9 +11,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setFriends } from "state/user";
 import { useEffect } from "react";
-import { io } from "socket.io-client";
 
-const socket = io(":8080");
 
 const Friend = ({
   friendPicture,
@@ -52,7 +50,6 @@ const Friend = ({
       .then((res) => {
         console.log(res.data);
         dispatch(setFriends(res.data));
-        socket.emit("notification", res.data.notification);
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +89,7 @@ const Friend = ({
       </FlexBox>
 
       {/* IF PROFILE PAGE RETURN NOTHING */}
-      {isProfilePage ? null : (
+      {isProfilePage || isUser ? null : (
         <IconButton
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
           onClick={() => patchFriend()}

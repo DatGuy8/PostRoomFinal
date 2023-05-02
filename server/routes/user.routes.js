@@ -7,7 +7,6 @@ import {
   getFriends,
   changeUserPhoto,
 } from "../controllers/user.controller.js";
-import { authenticate } from "../config/jwt.config.js";
 
 import { verifyToken } from "../config/verify.middleware.js";
 import multer from "multer";

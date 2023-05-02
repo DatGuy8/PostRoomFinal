@@ -10,6 +10,7 @@ import LoginPage from "views/loginPage";
 import HomePage from "views/homePage";
 import ProfilePage from "views/profilePage";
 import PostPage from "views/postPage";
+// import NavBar from "views/navBar";
 
 
 
@@ -24,6 +25,7 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          
           <Routes>
             <Route
               path="/"
