@@ -6,6 +6,7 @@ import {
   patchFriend,
   getFriends,
   changeUserPhoto,
+  getUserNotifications,
 } from "../controllers/user.controller.js";
 
 import { verifyToken } from "../config/verify.middleware.js";
@@ -25,11 +26,17 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-router.get("/friends/:userId",verifyToken, getFriends);
-router.get("/get/:_id",verifyToken, getOneUser);
+router.get("/friends/:userId", verifyToken, getFriends);
+router.get("/get/:_id", verifyToken, getOneUser);
+router.get("/notifications/:_id", verifyToken, getUserNotifications);
 router.post("/register", register);
 router.post("/login", login);
-router.patch("/changephoto/:_id",verifyToken, upload.single("photo"), changeUserPhoto);
-router.patch("/:friendId/friends",verifyToken, patchFriend);
+router.patch(
+  "/changephoto/:_id",
+  verifyToken,
+  upload.single("photo"),
+  changeUserPhoto
+);
+router.patch("/:friendId/friends", verifyToken, patchFriend);
 
 export default router;

@@ -56,26 +56,22 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // find user
+    // --------------FIND USER-----------
     const user = await User.findOne({ email: email })
       .select("+password")
       .populate("friends");
-
-    // if no user
+    // --------------IF NO USER--------------
     if (!user) return res.status(400).json({ message: "User does not exist" });
-
-    // check password
+    // -------------CHECK PASSWORD-----------
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentails" });
-
-    // add jwt token
+    // -------------ADD JWT TOKEN-----------
     const token = jwt.sign(
       {
         _id: user._id,
       },
       process.env.SECRET_KEY
     );
-
     res.status(200).json({ token, user });
   } catch (err) {
     res.status(400).json({ message: "Login failed", err });
@@ -86,9 +82,7 @@ export const login = async (req, res) => {
 export const getOneUser = async (req, res) => {
   try {
     const { _id } = req.params;
-
     const user = await User.findOne({ _id: _id });
-
     res.status(200).json(user);
   } catch (err) {
     res.status(400).json({ message: "Get One User failed", err });
@@ -112,7 +106,7 @@ export const patchFriend = async (req, res) => {
   try {
     const { friendId } = req.params;
     const { userId } = req.body;
-    const io  = req.app.get("io");
+    const io = req.app.get("io");
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
@@ -130,17 +124,17 @@ export const patchFriend = async (req, res) => {
       await notify.save();
       friend.notifications.push(notify);
     }
-    
+
     await user.save();
     await friend.save();
     await user.populate("friends");
 
-    io.once("connection", (socket)=>{
+    io.once("connection", (socket) => {
       socket.emit("getNotification", "WHY LIKE THAT");
       console.log("hdhafdsf");
     });
     // console.log(friend);
-    
+
     res
       .status(200)
       .json({ friends: user.friends, notification: friend.notifications });
@@ -161,6 +155,18 @@ export const changeUserPhoto = async (req, res) => {
       { new: true }
     );
     res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const getUserNotifications = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    console.log(_id);
+    const notifications = await Notification.find({user:_id}).sort("-createdAt").populate("sender")
+
+    res.status(200).json(notifications);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

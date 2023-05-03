@@ -9,6 +9,7 @@ export const userSlice = createSlice({
     user: null,
     token: null,
     friends: null,
+    notifications: [],
   },
   reducers: {
     setMode: (state) => {
@@ -26,7 +27,10 @@ export const userSlice = createSlice({
       state.user = null;
       state.token = null;
       state.friends = null;
-        
+      state.notifications = [];
+    },
+    setNotifications: (state,action) =>{
+      state.notifications = action.payload.notifications;
     },
     setUpdateUser: (state,action)=>{
       state.user = action.payload.user;
@@ -44,7 +48,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends,setUpdateUser } =
+export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends,setUpdateUser, setNotifications } =
   userSlice.actions;
 
 export default userSlice.reducer;
