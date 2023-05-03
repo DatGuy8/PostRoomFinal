@@ -10,16 +10,12 @@ import UserWidget from "widgets/UserWidget";
 import axios from "axios";
 import AllPostsWidget from "widgets/AllPostsWidget";
 
-
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { _id } = useParams();
   const currentUser = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  
-
-  
 
   useEffect(() => {
     axios
@@ -36,12 +32,9 @@ const ProfilePage = () => {
 
   if (!user) return null;
   const isUser = _id === currentUser._id;
-  
 
   return (
     <Box>
-      <NavBar />
-
       <Box
         width="100%"
         padding="2rem 6%"
@@ -50,11 +43,10 @@ const ProfilePage = () => {
         justifyContent="center"
         mt="75px"
       >
-
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={user._id} userPhoto={user.userPhoto} />
           <Box m="2rem 0" />
-          <FriendsListWidget friendId={_id} isProfilePage={true}/>
+          <FriendsListWidget friendId={_id} isProfilePage={true} />
         </Box>
 
         <Box
@@ -65,9 +57,7 @@ const ProfilePage = () => {
           <Box m="2rem 0" />
           <AllPostsWidget userId={user._id} isProfile="true" _id={_id} />
         </Box>
-
       </Box>
-      
     </Box>
   );
 };

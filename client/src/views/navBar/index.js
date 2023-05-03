@@ -25,19 +25,19 @@ import { setMode, setLogout } from "state/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBox from "components/FlexBox";
-import { io } from "socket.io-client";
 import NotificationWidget from "widgets/NotificationWidget";
 
 
-const NavBar = ({ notifications }) => {
+const NavBar = ({ socket }) => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const [isNotificationWidget, setIsNotificationWidget] = useState(false);
+  const [notifications,setNotifications] = useState([]);
+
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const userName = user.userName;
-  const [notifications1, setNotifications1] = useState("");
   
   //============== COLORS ==================
   const { palette } = useTheme();
@@ -46,35 +46,18 @@ const NavBar = ({ notifications }) => {
   const background = palette.background.default;
   const light = palette.primary.light;
   const alt = palette.background.alt;
-  // const socket = io(":8080");
+  
+  useEffect(()=>{
+    socket.emit("newUser", userName);
+  },[socket]);
 
-  // useEffect(()=>{
-  //   socket.on("notifications", (notifications))
-  // })
-
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    setSocket(io(":8080"));
-  }, []);
-
-  useEffect(() => {
-    socket?.emit("newUser", user.userName);
-    console.log("emit from client");
-  }, [socket, user]);
-
-  // // socket.on("getNotification", (data)=>{
-  //   console.log('getNotification', data);
-  //   setNotifications1(data);
-  // })
-
-  socket?.on("getNotification", (msg) => {
-    console.log("ADFASDFASDF", msg);
-    setNotifications1(msg);
-  });
+  useEffect(()=>{
+    socket.on("getNotifications", (data)=>{
+      setNotifications((prev)=> [...prev, data]);
+    });
+  },[socket]);
 
   const onLogOutHandler = () => {
-    socket.disconnect();
     dispatch(setLogout());
   };
 
@@ -110,7 +93,7 @@ const NavBar = ({ notifications }) => {
               padding="0.1rem 1.5rem"
               gap="3rem"
             >
-              <InputBase placeholder={notifications1} />
+              <InputBase placeholder="Search..." />
               <IconButton>
                 <Search />
               </IconButton>
@@ -135,7 +118,7 @@ const NavBar = ({ notifications }) => {
                 setIsNotificationWidget(!isNotificationWidget);
               }}
             >
-              <Badge badgeContent={notifications?.length} color="success">
+              <Badge color="success">
                 <Notifications sx={{ fontSize: "25px" }} />
               </Badge>
             </IconButton>

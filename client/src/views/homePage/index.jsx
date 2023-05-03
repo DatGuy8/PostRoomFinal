@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { Box, useMediaQuery } from "@mui/material";
-import NavBar from "views/navBar";
 import UserWidget from "widgets/UserWidget";
 import AddPostWidget from "widgets/AddPostWidget";
 import AllPostsWidget from "widgets/AllPostsWidget";
@@ -13,7 +12,7 @@ const HomePage = () => {
 
   return (
     <Box>
-      <NavBar notifications={user.notifications} />
+      
       <Box
         width="100%"
         padding="2rem 6%"

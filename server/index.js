@@ -20,11 +20,21 @@ app.use('/api/users',userRouter);
 app.use('/api/posts',postRouter);
 app.use('/api/comments',commentRouter);
 app.use('/images', express.static('images'));
-app.set("io", io);
 
 
 let onlineUsers = [];
 
+
+const startServer = async () => {
+  try {
+    connectDB(process.env.MONGODB_URL);
+    server.listen(8080, () => console.log('Server started on port http://localhost:8080'));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+startServer();
 const addNewUser = (userName, socketId) => {
   !onlineUsers.some((user) => user.userName === userName) &&
     onlineUsers.push({ userName, socketId });
@@ -41,38 +51,14 @@ const getUser = (userName) => {
 io.on("connection", (socket) =>{
   console.log('Client Connected!', socket.id);
   console.log('========================================')
-  // socket.on("recievedNewPost",(msg)=>{
-  //   console.log(msg);
-  //   io.emit('newPost',msg);
-  // })
+  
   socket.on("newUser", (userName)=>{
     addNewUser(userName, socket.id);
     console.log(onlineUsers);
-  })
-
-  // socket.on("notification", ({sender, user, type})=>{
-  //   const reciever = getUser(user.userName);
-  //   io.to(reciever.socketId).emit("getNotification",{
-  //     sender,
-  //     text
-  //   })
-  // })
-
-  // socket.on("",())
+  });
 
   socket.on("disconnect", () => {
     removeUser(socket.id);
     console.log('disconnected user', onlineUsers);
   });
-})
-
-const startServer = async () => {
-  try {
-    connectDB(process.env.MONGODB_URL);
-    server.listen(8080, () => console.log('Server started on port http://localhost:8080'));
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-startServer();
+});

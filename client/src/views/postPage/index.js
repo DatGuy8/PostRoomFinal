@@ -27,8 +27,7 @@ const PostPage = () => {
   if (!post) return null;
 
   return (
-    <>
-      <NavBar />
+    
       <Box width={isNonMobileScreens ? "50%" : "100%"} margin="0 auto" padding="0 6%" mt='100px'>
         <PostWidget
           title={post.title}
@@ -43,7 +42,7 @@ const PostPage = () => {
           postUserLocation={post.userId.location}
         />
       </Box>
-    </>
+    
   );
 };
 

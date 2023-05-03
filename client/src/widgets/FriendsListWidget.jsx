@@ -72,7 +72,7 @@ const FriendsListWidget = ({ friendId, isProfilePage = false }) => {
                 name={`${friend.firstName} ${friend.lastName}`}
                 friendLocation={friend.location}
                 friendPicture={friend.userPhoto}
-                isProfilePage={isUser? false : true}
+                isProfilePage={isUser ? false : true}
               />
             ))
           : friends?.map((friend) => (
