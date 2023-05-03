@@ -21,24 +21,25 @@ import {
   Menu,
   Close,
 } from "@mui/icons-material";
-import { setMode, setLogout } from "state/user";
+import { setMode, setLogout, setNotifications } from "state/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FlexBox from "components/FlexBox";
 import NotificationWidget from "widgets/NotificationWidget";
-
+import axios from "axios";
 
 const NavBar = ({ socket }) => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const [isNotificationWidget, setIsNotificationWidget] = useState(false);
-  const [notifications,setNotifications] = useState([]);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.notifications);
   const user = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
   const userName = user.userName;
-  
+
   //============== COLORS ==================
   const { palette } = useTheme();
   const neutral = palette.neutral.light;
@@ -46,16 +47,28 @@ const NavBar = ({ socket }) => {
   const background = palette.background.default;
   const light = palette.primary.light;
   const alt = palette.background.alt;
-  
-  useEffect(()=>{
-    socket.emit("newUser", userName);
-  },[socket]);
 
-  useEffect(()=>{
-    socket.on("getNotifications", (data)=>{
-      setNotifications((prev)=> [...prev, data]);
+  useEffect(() => {
+    socket.emit("newUser", userName);
+    axios
+      .get(`http://localhost:8080/api/users/notifications/${user._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log(res);
+        dispatch(setNotifications({ notifications: res.data }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [socket]);
+  console.log("notifications", notifications);
+
+  useEffect(() => {
+    socket.on("getNotifications", (data) => {
+      
     });
-  },[socket]);
+  }, [socket]);
 
   const onLogOutHandler = () => {
     dispatch(setLogout());
@@ -118,7 +131,7 @@ const NavBar = ({ socket }) => {
                 setIsNotificationWidget(!isNotificationWidget);
               }}
             >
-              <Badge color="success">
+              <Badge color="success" badgeContent={notifications?.length}>
                 <Notifications sx={{ fontSize: "25px" }} />
               </Badge>
             </IconButton>
