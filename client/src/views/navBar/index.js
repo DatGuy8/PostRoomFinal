@@ -252,7 +252,7 @@ const NavBar = ({ socket }) => {
           </Box>
         )}
       </FlexBox>
-      {isNotificationWidget && <NotificationWidget />}
+      {isNotificationWidget && <NotificationWidget notifications={notifications}/>}
     </>
   );
 };

@@ -106,7 +106,6 @@ export const patchFriend = async (req, res) => {
   try {
     const { friendId } = req.params;
     const { userId } = req.body;
-    const io = req.app.get("io");
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
@@ -128,12 +127,6 @@ export const patchFriend = async (req, res) => {
     await user.save();
     await friend.save();
     await user.populate("friends");
-
-    io.once("connection", (socket) => {
-      socket.emit("getNotification", "WHY LIKE THAT");
-      console.log("hdhafdsf");
-    });
-    // console.log(friend);
 
     res
       .status(200)

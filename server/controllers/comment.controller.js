@@ -1,6 +1,7 @@
 import Comment from "../models/comment.js";
 import Post from "../models/post.js";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
 
 export const addComment = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ export const addComment = async (req, res) => {
       userId,
       postId,
     });
-    
+
     const relatedPost = await Post.findById(postId)
       .populate("userId")
       .populate({
@@ -28,6 +29,18 @@ export const addComment = async (req, res) => {
     }
 
     const updatedPost = await relatedPost.save();
+
+    const notify = await Notification.create({
+      user: relatedPost.userId._id,
+      sender: userId,
+      type: "comment",
+      post: postId,
+    });
+
+    const friendToNotify = await User.findById(relatedPost.userId._id);
+    friendToNotify.notifications.push(notify);
+    await friendToNotify.save();
+
     // console.log('================================');
     // console.log(relatedPost);
     res.status(200).json(updatedPost);

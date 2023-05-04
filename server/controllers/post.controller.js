@@ -1,6 +1,7 @@
 //========== IMPORTS THE MODEL FILE ==============
 import Post from "../models/post.js";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
 
 //========= CREATE A POST ===========
 export const createPost = async (req, res) => {
@@ -106,6 +107,16 @@ export const likePost = async (req, res) => {
       post.likes.delete(userId);
     } else {
       post.likes.set(userId, true);
+      const notify = await Notification.create({
+        user: post.userId,
+        sender: userId,
+        type: "likePost",
+        post: _id
+      });
+
+      const friendToNotify = await User.findById(post.userId);
+      friendToNotify.notifications.push(notify);
+      await friendToNotify.save();
     }
 
     const updatedPost = await Post.findByIdAndUpdate(
