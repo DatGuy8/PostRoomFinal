@@ -51,7 +51,7 @@ const NavBar = ({ socket }) => {
   useEffect(() => {
     socket.emit("newUser", userName);
     axios
-      .get(`http://localhost:8080/api/users/notifications/${user._id}`, {
+      .get(`http://localhost:8080/api/notifications/user/${user._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -65,9 +65,7 @@ const NavBar = ({ socket }) => {
   console.log("notifications", notifications);
 
   useEffect(() => {
-    socket.on("getNotifications", (data) => {
-      
-    });
+    socket.on("getNotifications", (data) => {});
   }, [socket]);
 
   const onLogOutHandler = () => {
@@ -252,7 +250,13 @@ const NavBar = ({ socket }) => {
           </Box>
         )}
       </FlexBox>
-      {isNotificationWidget && <NotificationWidget notifications={notifications}/>}
+      {isNotificationWidget && (
+        <NotificationWidget
+          notifications={notifications}
+          setIsNotificationWidget={setIsNotificationWidget}
+          isNotificationWidget={isNotificationWidget}
+        />
+      )}
     </>
   );
 };

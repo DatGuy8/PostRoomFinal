@@ -6,7 +6,6 @@ import {
   patchFriend,
   getFriends,
   changeUserPhoto,
-  getUserNotifications,
 } from "../controllers/user.controller.js";
 
 import { verifyToken } from "../config/verify.middleware.js";
@@ -28,7 +27,7 @@ const router = express.Router();
 
 router.get("/friends/:userId", verifyToken, getFriends);
 router.get("/get/:_id", verifyToken, getOneUser);
-router.get("/notifications/:_id", verifyToken, getUserNotifications);
+
 router.post("/register", register);
 router.post("/login", login);
 router.patch(

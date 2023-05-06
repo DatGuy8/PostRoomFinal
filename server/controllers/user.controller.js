@@ -153,14 +153,3 @@ export const changeUserPhoto = async (req, res) => {
   }
 };
 
-export const getUserNotifications = async (req, res) => {
-  try {
-    const { _id } = req.params;
-    console.log(_id);
-    const notifications = await Notification.find({user:_id}).sort("-createdAt").populate("sender")
-
-    res.status(200).json(notifications);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
