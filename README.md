@@ -19,3 +19,7 @@
 <h2>Notification widget</h2>
 <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20104536.png">
 <p>Users will be notifited whenever another user likes, comments, or befriends in real time</p>
+
+<h2>Comments</h2>
+<img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20101830.png">
+<p>Comments and likes are updated and added with timestamps shown</p>
