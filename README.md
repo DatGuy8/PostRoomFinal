@@ -12,8 +12,9 @@
 <h2>Image uploads</h2>
 <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103710.png">
 <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103927.png">
+<p>Profile picture is updated after upload.</p>
 <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103940.png">
-<p>User can add photos that are seemlessly updated to their profile and to the feed.</p>
+<p>Posts are refreshed with new post listed at the top of the feed.</p>
 
 <h2>Notification widget</h2>
 <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20104536.png">
