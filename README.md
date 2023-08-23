@@ -1,21 +1,93 @@
-<h1>PostRoom</h1>
 
-<p>Post Room is a fully responsive social media app. Users are able to create, comment, and like posts. Image upload incorporated, so users are able to upload profile pictures and images for posts.</p>
+# PostRoom
+> Post Room is a social media app.
 
-<h1>Technologies Used</h1>
- <p>MongoDB, Express, React, Node.js, MaterialUI, Redux, Socket.io</p>
- 
- <h2>Home Page</h2>
- <img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20101400.png">
-<p>Posts are created and updated in real time, with the most recent post added to the top of the page. Users can add friends with a click of the button and the user friends widget will update immediately.</p>
 
-<h2>Image uploads</h2>
-<img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103710.png">
-<img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103927.png">
-<p>Profile picture is updated after upload.</p>
-<img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103940.png">
-<p>Posts are refreshed with new post listed at the top of the feed.</p>
+## Table of Contents
+* [About](#about)
+* [Technologies Used](#technologies-used)
+* [Screenshots](#screenshots)
+* [Setup](#setup)
+* [Project Status](#project-status)
 
-<h2>Notification widget</h2>
-<img src="https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20104536.png">
-<p>Users will be notifited whenever another user likes, comments, or befriends in real time</p>
+<!-- * [License](#license) -->
+
+
+## About
+PostRoom is a Social Media App that can showcase my skills as a full stack developer. It is a fully resposive app that has dark or light mode. Users are able to add posts, comment on posts, like posts, and upload images. It also has notifications and a friends list that is immediately shown live.
+
+
+
+## Technologies Used
+- React.js
+- Express
+- Node.js
+- MongoDB
+- Redux
+- Material UI
+- Socket.io
+- formik
+- yup
+
+
+
+## Screenshots
+Home Page
+![Example screenshot](./readMeImages/Screenshot%202023-06-14%20101400.png)
+One User Profile Page
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20101722.png)
+Comments and likes
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20101830.png)
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103710.png)
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103723.png)
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20103940.png)
+Notifcation widget with real time updates
+![!](https://github.com/DatGuy8/PostRoomFinal/blob/master/readMeImages/Screenshot%202023-06-14%20104536.png)
+<!-- If you have screenshots you'd like to share, include them here. -->
+
+
+## Setup
+
+
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+
+
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/DatGuy8/PostRoomFinal.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
+
+
+
+## Project Status
+Project is: _in progress_ 
+working on a few bugs and a cleaner notification widget
+
+
+To do:
+- Feature to be added 1
+- Feature to be added 2
+
+
+
+
+<!-- Optional -->
+<!-- ## License -->
+<!-- This project is open source and available under the [... License](). -->
+
+<!-- You don't have to include all sections - just the one's relevant to your project -->
