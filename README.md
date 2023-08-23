@@ -76,12 +76,10 @@ This is an example of how to list things you need to use the software and how to
 
 ## Project Status
 Project is: _in progress_ 
-working on a few bugs and a cleaner notification widget
-
 
 To do:
-- Feature to be added 1
-- Feature to be added 2
+- working on a few bugs and a cleaner notification widget
+
 
 
 
