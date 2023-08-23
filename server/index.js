@@ -24,6 +24,7 @@ app.use('/api/notifications', notificationRouter);
 app.use('/images', express.static('images'));
 
 
+// Sets up users to have live notifications
 let onlineUsers = [];
 
 
@@ -36,7 +37,10 @@ const startServer = async () => {
   }
 }
 
+
 startServer();
+
+// these are functions that use for socket io
 const addNewUser = (userName, socketId) => {
   !onlineUsers.some((user) => user.userName === userName) &&
     onlineUsers.push({ userName, socketId });
@@ -50,15 +54,17 @@ const getUser = (userName) => {
   return onlineUsers.find((user) => user.userName === userName);
 };
 
+// when a user signs in
 io.on("connection", (socket) =>{
   console.log('Client Connected!', socket.id);
-  console.log('========================================')
-  
+
+  //adds username of logged in user to the list of other online users
   socket.on("newUser", (userName)=>{
     addNewUser(userName, socket.id);
     console.log(onlineUsers);
   });
 
+  // when a users logs out or exits they are removed from live notifications
   socket.on("disconnect", () => {
     removeUser(socket.id);
     console.log('disconnected user', onlineUsers);

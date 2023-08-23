@@ -52,13 +52,6 @@ const PostWidget = ({
   const primary = palette.primary.main;
 
   const commentTime = (time) => {
-    // const currentDate = moment();
-    // const postDate = moment(time);
-    // const timeDifference = postDate.fromNow();
-    // const isMoreThanTwoDaysAgo = postDate.isBefore(
-    //   currentDate.subtract(2, "days")
-    // );
-    // return isMoreThanTwoDaysAgo ? postDate.format("MM/D/YY") : timeDifference;
     return moment(new Date(time)).fromNow();
   };
 

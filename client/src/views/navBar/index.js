@@ -272,9 +272,10 @@ const NavBar = ({ socket }) => {
             </FlexBox>
             {isNotificationWidget && (
                 <NotificationWidget
-                    notifications={notifications}
+                    
                     setIsNotificationWidget={setIsNotificationWidget}
                     isNotificationWidget={isNotificationWidget}
+                    userId={user._id}
                 />
             )}
         </>

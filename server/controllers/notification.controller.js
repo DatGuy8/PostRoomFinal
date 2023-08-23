@@ -33,3 +33,27 @@ export const readAllNotifications = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+// deletes a notification
+export const deleteOneNotification = async (req, res) => {
+  try {
+    
+    const { notificationId,userId } = req.body;
+
+    // finds notification and deletes it;
+    await Notification.findByIdAndDelete(notificationId);
+
+    // then we need to get the rest of the notifications to update
+    const notifications = await Notification.find({ user: userId, read: false })
+      .sort("-createdAt")
+      .populate("sender");
+
+    
+    // sends back response with updated notifications
+    res.status(200).json(notifications);
+
+    
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
