@@ -28,7 +28,7 @@ import FlexBox from "components/FlexBox";
 import NotificationWidget from "widgets/NotificationWidget";
 import axios from "axios";
 
-const NavBar = ({ socket }) => {
+const NavBar = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
     const [isNotificationWidget, setIsNotificationWidget] = useState(false);
 
@@ -49,24 +49,21 @@ const NavBar = ({ socket }) => {
     const alt = palette.background.alt;
 
     useEffect(() => {
-        socket.emit("newUser", userName);
+        // socket.emit("newUser", userName);
         axios
             .get(`http://localhost:8080/api/notifications/user/${user._id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 dispatch(setNotifications({ notifications: res.data }));
             })
             .catch((err) => {
                 console.log(err);
             });
-    }, [socket]);
-    console.log("notifications", notifications);
+    }, []);
 
-    useEffect(() => {
-        socket.on("getNotifications", (data) => {});
-    }, [socket]);
+    
 
     const onLogOutHandler = () => {
         dispatch(setLogout());
@@ -174,7 +171,7 @@ const NavBar = ({ socket }) => {
                         }
                     >
                         <Badge
-                            badgeContent={user.notifications?.length}
+                            badgeContent={notifications?.length}
                             color="success"
                         >
                             <Menu />
@@ -233,7 +230,7 @@ const NavBar = ({ socket }) => {
                                 }}
                             >
                                 <Badge
-                                    badgeContent={user.notifications?.length}
+                                    badgeContent={notifications?.length}
                                     color="success"
                                 >
                                     <Notifications sx={{ fontSize: "25px" }} />
@@ -272,7 +269,6 @@ const NavBar = ({ socket }) => {
             </FlexBox>
             {isNotificationWidget && (
                 <NotificationWidget
-                    
                     setIsNotificationWidget={setIsNotificationWidget}
                     isNotificationWidget={isNotificationWidget}
                     userId={user._id}

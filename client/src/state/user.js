@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import io from 'socket.io-client';
 
+// Initialize the Socket.io connection
+const socket = io.connect('http://localhost:8080');
 
 
 export const userSlice = createSlice({
@@ -45,10 +48,19 @@ export const userSlice = createSlice({
       });
       state.posts = updatedPosts;
     },
+    emitNotification:(state, action)=>{
+      const {targetUserName, notification} = action.payload;
+      
+      socket.emit('newNotification',
+        targetUserName,
+        notification,
+      )
+      // console.log("emitting" ,notification);
+    }
   },
 });
 
-export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends,setUpdateUser, setNotifications } =
+export const { setMode, setLogin, setLogout, setPost, setPosts, setFriends,setUpdateUser, setNotifications, emitNotification } =
   userSlice.actions;
 
 export default userSlice.reducer;

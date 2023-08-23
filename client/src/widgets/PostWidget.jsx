@@ -37,6 +37,7 @@ const PostWidget = ({
   postUserFullName,
   postUserLocation,
   createdAt,
+  userName,
 }) => {
   const [comment, setComment] = useState("");
   const [isComment, setIsComment] = useState(false);
@@ -103,6 +104,7 @@ const PostWidget = ({
         name={postUserFullName}
         friendLocation={postUserLocation}
         friendPicture={postUserPicture}
+        userName={userName}
       />
 
       <Typography

@@ -14,40 +14,67 @@ import NavBar from "views/navBar";
 import { io } from "socket.io-client";
 
 function App() {
-  const mode = useSelector((state) => state.mode);
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  const isAuth = Boolean(useSelector((state) => state.token));
-  const [socket] = useState(io(":8080"));
+    const mode = useSelector((state) => state.mode);
+    const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+    const isAuth = Boolean(useSelector((state) => state.token));
+    const [socket] = useState(io(":8080"));
 
+    const user = useSelector((state) => state.user);
+    const userName = user.userName;
 
-  return (
-    <div>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {isAuth ? <NavBar socket={socket}/> : null}
-          <Routes>
-            <Route
-              path="/"
-              element={isAuth ? <Navigate to="/home" /> : <LoginPage />}
-            />
-            <Route
-              path="/home"
-              element={isAuth ? <HomePage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile/:_id"
-              element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/post/:_id"
-              element={isAuth ? <PostPage /> : <Navigate to="/" />}
-            />
-          </Routes>
-        </ThemeProvider>
-      </BrowserRouter>
-    </div>
-  );
+    // SETTING UP SOCKET IO TO RECIEVE NOTIFICATIONS
+    useEffect(() => {
+        socket.emit("newUser", userName);
+
+        socket.on("recieveNotification", (notification) => {
+            console.log("in App.js socket responding", notification);
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    // const emitNotification = (targetUserName, notification) => {
+    //     socket.emit("newNotification", { targetUserName, notification });
+    // };
+
+    return (
+        <div>
+            <BrowserRouter>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    {isAuth ? <NavBar/> : null}
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                isAuth ? <Navigate to="/home" /> : <LoginPage />
+                            }
+                        />
+                        <Route
+                            path="/home"
+                            element={
+                                isAuth ? <HomePage /> : <Navigate to="/" />
+                            }
+                        />
+                        <Route
+                            path="/profile/:_id"
+                            element={
+                                isAuth ? <ProfilePage /> : <Navigate to="/" />
+                            }
+                        />
+                        <Route
+                            path="/post/:_id"
+                            element={
+                                isAuth ? <PostPage /> : <Navigate to="/" />
+                            }
+                        />
+                    </Routes>
+                </ThemeProvider>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;

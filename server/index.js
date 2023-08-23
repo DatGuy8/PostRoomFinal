@@ -64,6 +64,17 @@ io.on("connection", (socket) =>{
     console.log(onlineUsers);
   });
 
+  // Listens for notifications
+  socket.on("newNotification", (targetUserName,notification)=>{
+    console.log("targetUserName",targetUserName);
+    const targetUser = getUser(targetUserName);
+    if(targetUser){
+      console.log("targetUser", targetUser);
+      io.to(targetUser.socketId).emit("recieveNotification", notification);
+    };
+  });
+
+
   // when a users logs out or exits they are removed from live notifications
   socket.on("disconnect", () => {
     removeUser(socket.id);

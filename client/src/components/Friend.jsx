@@ -9,8 +9,7 @@ import FlexBox from "./FlexBox";
 import UserProfilePhoto from "./UserProfilePhoto";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setFriends } from "state/user";
-import { useEffect } from "react";
+import { emitNotification, setFriends } from "state/user";
 
 
 const Friend = ({
@@ -18,6 +17,7 @@ const Friend = ({
   friendLocation,
   name,
   friendId,
+  userName,
   isProfilePage = false,
 }) => {
   const navigate = useNavigate();
@@ -48,8 +48,10 @@ const Friend = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         dispatch(setFriends(res.data));
+        
+        dispatch(emitNotification({targetUserName: userName, notification: res.data}));
       })
       .catch((err) => {
         console.log(err);
@@ -81,7 +83,6 @@ const Friend = ({
           <Typography
             color={medium}
             fontSize="0.75rem"
-            onClick={() => console.log(friends)}
           >
             {friendLocation}
           </Typography>

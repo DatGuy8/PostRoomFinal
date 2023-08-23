@@ -75,6 +75,7 @@ const AllPostsWidget = ({ userId, isProfile = false }) => {
             postUserPicture={userId.userPhoto}
             postUserFullName={userId.firstName + " " + userId.lastName}
             postUserLocation={userId.location}
+            userName={userId.userName}
           />
         )
       )}

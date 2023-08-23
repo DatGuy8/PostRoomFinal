@@ -72,6 +72,7 @@ const FriendsListWidget = ({ friendId, isProfilePage = false }) => {
                 name={`${friend.firstName} ${friend.lastName}`}
                 friendLocation={friend.location}
                 friendPicture={friend.userPhoto}
+                userName={friend.userName}
                 isProfilePage={isUser ? false : true}
               />
             ))
@@ -82,6 +83,7 @@ const FriendsListWidget = ({ friendId, isProfilePage = false }) => {
                 name={`${friend.firstName} ${friend.lastName}`}
                 friendLocation={friend.location}
                 friendPicture={friend.userPhoto}
+                userName={friend.userName}
               />
             ))}
       </Box>
