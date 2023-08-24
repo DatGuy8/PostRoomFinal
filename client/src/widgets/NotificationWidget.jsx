@@ -64,8 +64,9 @@ const NotificationWidget = ({
             <WidgetBox
                 m="5rem 6% 0 6%"
                 position="fixed"
-                width="88%"
+                width={isNonMobileScreens ? "42%" : "88%"}
                 zIndex="10"
+                height="75%"
             >
                 <Typography textAlign="center" variant="h3" mb="1rem">
                     Notifications
@@ -73,9 +74,7 @@ const NotificationWidget = ({
                 <FlexBox
                     width="100%"
                     flexDirection="column"
-                    height="500px"
                     gap="1rem"
-                    overflow="auto"
                 >
                     {notifications.length === 0 ? (
                         <Typography>No Notifications</Typography>
@@ -84,7 +83,7 @@ const NotificationWidget = ({
                             //Flex box needs onClick if not friend /post/postid if not send to friend page '/profile/senderId
                             <FlexBox
                                 key={i}
-                                width={isNonMobileScreens ? "42%" : "100%"}
+                                width="100%"
                                 m="0 auto"
                             >
                                 <FlexBox gap=".5rem">

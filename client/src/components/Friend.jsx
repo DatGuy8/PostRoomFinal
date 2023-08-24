@@ -50,8 +50,7 @@ const Friend = ({
       .then((res) => {
         // console.log(res.data);
         dispatch(setFriends(res.data));
-        
-        dispatch(emitNotification({targetUserName: userName, notification: res.data}));
+        dispatch(emitNotification({targetUserName: userName}));
       })
       .catch((err) => {
         console.log(err);

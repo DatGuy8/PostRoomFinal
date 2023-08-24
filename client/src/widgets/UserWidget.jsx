@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Dropzone from "react-dropzone";
-import { setUpdateUser,setFriends } from "state/user";
+import { setUpdateUser,setFriends, emitNotification } from "state/user";
 
 const UserWidget = ({ userId, userPhoto }) => {
   const [user, setUser] = useState(null);
@@ -55,6 +55,9 @@ const UserWidget = ({ userId, userPhoto }) => {
         console.log("UserWidget error", err);
       });
   }, [userId,addFriend]);
+  
+  if (!user) return null;
+  const { firstName, lastName, location, userName, occupation, friends } = user;
 
   const patchFriend = () => {
     axios
@@ -68,6 +71,7 @@ const UserWidget = ({ userId, userPhoto }) => {
       .then((res) => {
         console.log(res.data);
         dispatch(setFriends(res.data));
+        dispatch(emitNotification({targetUserName:userName}));
         setAddFriend(!addFriend);
       })
       .catch((err) => {
@@ -94,8 +98,6 @@ const UserWidget = ({ userId, userPhoto }) => {
       });
   };
 
-  if (!user) return null;
-  const { firstName, lastName, location, userName, occupation, friends } = user;
 
   const isFriend = Array.isArray(friends)
     ? friends.some((friend) => friend === _id)

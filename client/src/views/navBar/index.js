@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import FlexBox from "components/FlexBox";
 import NotificationWidget from "widgets/NotificationWidget";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 const NavBar = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -47,9 +48,17 @@ const NavBar = () => {
     const background = palette.background.default;
     const light = palette.primary.light;
     const alt = palette.background.alt;
+    const [newNotification, setNewNotifications] = useState(0);
+    const [socket] = useState(io(":8080"));
+    socket.emit("newUser", userName);
 
     useEffect(() => {
-        // socket.emit("newUser", userName);
+        // SETTING UP SOCKET IO TO RECIEVE NOTIFICATIONS
+
+        socket.on("recieveNotification", (notification) => {
+            console.log("in App.js socket responding", notification);
+            setNewNotifications(newNotification + 1);
+        });
         axios
             .get(`http://localhost:8080/api/notifications/user/${user._id}`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -61,9 +70,7 @@ const NavBar = () => {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
-
-    
+    }, [newNotification]);
 
     const onLogOutHandler = () => {
         dispatch(setLogout());
@@ -84,7 +91,10 @@ const NavBar = () => {
                         fontWeight="bold"
                         fontSize="clamp(1rem, 2rem, 2.25rem)"
                         color="primary"
-                        onClick={() => navigate("/home")}
+                        onClick={() => {
+                            navigate("/home");
+                            window.scrollTo(0,0);
+                        }}
                         sx={{
                             "&:hover": {
                                 color: light,

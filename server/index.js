@@ -65,12 +65,12 @@ io.on("connection", (socket) =>{
   });
 
   // Listens for notifications
-  socket.on("newNotification", (targetUserName,notification)=>{
-    console.log("targetUserName",targetUserName);
+  socket.on("newNotification", (targetUserName)=>{
+    
     const targetUser = getUser(targetUserName);
+    console.log("targetUser", targetUser);
     if(targetUser){
-      console.log("targetUser", targetUser);
-      io.to(targetUser.socketId).emit("recieveNotification", notification);
+      io.to(targetUser.socketId).emit("recieveNotification", "notification");
     };
   });
 

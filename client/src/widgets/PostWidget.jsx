@@ -21,7 +21,7 @@ import axios from "axios";
 import WidgetBox from "components/WidgetBox";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "state/user";
+import { emitNotification, setPost } from "state/user";
 import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import UserProfilePhoto from "components/UserProfilePhoto";
@@ -71,6 +71,7 @@ const PostWidget = ({
       )
       .then((res) => {
         dispatch(setPost({ post: res.data }));
+        dispatch(emitNotification({targetUserName:userName}));
       })
       .catch((err) => {
         console.log(err);
@@ -90,6 +91,7 @@ const PostWidget = ({
       )
       .then((res) => {
         dispatch(setPost({ post: res.data }));
+        dispatch(emitNotification({targetUserName:userName}));
         setComment("");
       })
       .catch((err) => {

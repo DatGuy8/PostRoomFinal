@@ -40,6 +40,7 @@ const PostPage = () => {
           postUserPicture={post.userId.userPhoto}
           postUserFullName={post.userId.firstName + " " + post.userId.lastName}
           postUserLocation={post.userId.location}
+          userName={post.userId.userName}
         />
       </Box>
     
