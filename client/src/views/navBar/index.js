@@ -17,7 +17,6 @@ import {
     DarkMode,
     LightMode,
     Notifications,
-    Help,
     Menu,
     Close,
 } from "@mui/icons-material";
@@ -54,11 +53,11 @@ const NavBar = () => {
 
     useEffect(() => {
         // SETTING UP SOCKET IO TO RECIEVE NOTIFICATIONS
-
         socket.on("recieveNotification", (notification) => {
             console.log("in App.js socket responding", notification);
             setNewNotifications(newNotification + 1);
         });
+
         axios
             .get(`http://localhost:8080/api/notifications/user/${user._id}`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -74,6 +73,7 @@ const NavBar = () => {
 
     const onLogOutHandler = () => {
         dispatch(setLogout());
+        socket.disconnect();
     };
 
     return (
@@ -93,7 +93,7 @@ const NavBar = () => {
                         color="primary"
                         onClick={() => {
                             navigate("/home");
-                            window.scrollTo(0,0);
+                            window.scrollTo(0, 0);
                         }}
                         sx={{
                             "&:hover": {
@@ -145,7 +145,7 @@ const NavBar = () => {
                                 <Notifications sx={{ fontSize: "25px" }} />
                             </Badge>
                         </IconButton>
-                        <Help sx={{ fontSize: "25px" }} />
+                        
                         <FormControl variant="standard" value={userName}>
                             <Select
                                 value={userName}
@@ -246,7 +246,7 @@ const NavBar = () => {
                                     <Notifications sx={{ fontSize: "25px" }} />
                                 </Badge>
                             </IconButton>
-                            <Help sx={{ fontSize: "25px" }} />
+                            
                             <FormControl variant="standard" value={userName}>
                                 <Select
                                     value={userName}

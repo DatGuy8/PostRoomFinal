@@ -31,7 +31,7 @@ router.get("/get/:_id", verifyToken, getOneUser);
 router.post("/register", register);
 router.post("/login", login);
 router.patch(
-  "/changephoto/:_id",
+  "/changephoto/:_id/:userPage",
   verifyToken,
   upload.single("photo"),
   changeUserPhoto

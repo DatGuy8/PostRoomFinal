@@ -1,10 +1,12 @@
 //========== IMPORTS THE MODEL FILE ==============
 import User from "../models/user.js";
 import Notification from "../models/notification.js";
+import Post from "../models/post.js";
 // ========= ADDS TOKEN FOR USERS ==============
 import jwt from "jsonwebtoken";
 // =========== BCRYPT TO HASH PASSWORDS ==========
 import bcrypt from "bcrypt";
+
 
 // ========= REGISTER USER ==========
 export const register = async (req, res) => {
@@ -139,7 +141,7 @@ export const patchFriend = async (req, res) => {
 //===================== CHANGE USERPHOTO ==============
 export const changeUserPhoto = async (req, res) => {
   try {
-    const { _id } = req.params;
+    const { _id,userPage } = req.params;
     const photo = req.file.filename;
 
     const user = await User.findByIdAndUpdate(
@@ -147,7 +149,38 @@ export const changeUserPhoto = async (req, res) => {
       { userPhoto: photo },
       { new: true }
     );
-    res.status(200).json(user);
+    
+    // So we need to find the posts so when a user changes photos those posts will update the user photo as well
+    let posts = [];
+    
+    if(userPage === "false"){
+      console.log("in if");
+      posts = await Post.find()
+      .sort("-createdAt")
+      .populate("userId")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
+    } else {
+      console.log("in else");
+      posts = await Post.find({ userId: _id })
+      .populate("userId")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      });
+    }
+
+    
+
+    res.status(200).json({user: user, posts: posts});
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

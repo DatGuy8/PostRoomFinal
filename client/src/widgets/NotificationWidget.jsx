@@ -62,11 +62,14 @@ const NotificationWidget = ({
             onClose={() => setIsNotificationWidget(false)}
         >
             <WidgetBox
-                m="5rem 6% 0 6%"
                 position="fixed"
                 width={isNonMobileScreens ? "42%" : "88%"}
                 zIndex="10"
-                height="75%"
+                minHeight="50%"
+                left="50%"
+                top="5rem"
+                sx={{
+                    transform: "translate(-50%, 0);"}}
             >
                 <Typography textAlign="center" variant="h3" mb="1rem">
                     Notifications
@@ -75,16 +78,21 @@ const NotificationWidget = ({
                     width="100%"
                     flexDirection="column"
                     gap="1rem"
+                    height="100%"
+                    overflow="auto"
                 >
                     {notifications.length === 0 ? (
                         <Typography>No Notifications</Typography>
                     ) : (
                         notifications.map((notification, i) => (
-                            //Flex box needs onClick if not friend /post/postid if not send to friend page '/profile/senderId
-                            <FlexBox
+                            
+                            <Box
                                 key={i}
                                 width="100%"
                                 m="0 auto"
+                                display="flex"
+                                justifyContent="space-around"
+                                alignItems="center"
                             >
                                 <FlexBox gap=".5rem">
                                     <Box
@@ -198,7 +206,7 @@ const NotificationWidget = ({
                                 >
                                     Delete
                                 </Button>
-                            </FlexBox>
+                            </Box>
                         ))
                     )}
                 </FlexBox>

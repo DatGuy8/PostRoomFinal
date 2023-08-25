@@ -1,4 +1,4 @@
-import { ThemeProvider, Typography } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline } from "@mui/material";
